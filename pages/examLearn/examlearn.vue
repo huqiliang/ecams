@@ -18,11 +18,11 @@
 			</QSTabs>
 		</view>
 		<swiper 
-		:style="{'height': swiper.height,}" 
-		:current="swiper.current" 
-		@change="swiperChange"
-		@transition="transition"
-		@animationfinish="animationfinish">
+			:style="{'height': swiper.height,}" 
+			:current="swiper.current" 
+			@change="swiperChange"
+			@transition="transition"
+			@animationfinish="animationfinish">
 			<swiper-item class="swiper-item">
 				<scroll-view scroll-y style="height: 100%;width: 100%;background-color: #F7F9FA;margin-top:-16rpx;" >
 					<view class="scroll-items" >
@@ -55,11 +55,9 @@
 				<scroll-view scroll-y style="height: 100%;width: 100%;" >
 					<view class="scroll-items" style="background-color: #F7F9FA;">
 						<view class="scroll-item-text-box">
-							 <view class="uni-flex uni-row" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
-								<view class="flex-item">
-									<Card>1</Card>
-								</view>
-							 </view>
+							
+									<uni-list-item title="列表右侧带箭头" />
+							
 						</view>
 					</view>
 				</scroll-view>
@@ -73,7 +71,8 @@
 	import QSTabs from '@/components/QS-tabs/QS-tabs.vue';
 	import api from "../../server/index.js"
 	import {ERR_OK} from "@/utils/config.js"
-	// import {uniBadge} from '@dcloudio/uni-ui'
+	
+	import {uniList,uniListItem } from '@dcloudio/uni-ui'
 	const Sys = uni.getSystemInfoSync();
 	const wH = Sys.windowHeight;
 	
@@ -81,7 +80,9 @@
 	export default {
 		components: {
 			QSTabs,
-			Card
+			Card,
+			uniList,
+			uniListItem
 		},
 		data() {
 			return {
@@ -200,10 +201,7 @@
 		font-family: PingFangSC-Semibold;
 		font-size: 32rpx;
 		color: #FFFFFF;
-		text-align: center;
-		overflow:hidden; //超出的文本隐藏
-		text-overflow:ellipsis; //溢出用省略号显示
-		white-space:nowrap;
+		
 		
 	}
 	.card-time {

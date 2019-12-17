@@ -1,6 +1,12 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+		    "path" : "pages/personInfo/personInfo",
+		    "style" : {
+				"navigationBarTitleText": "个人信息"
+			}
+		},
+		{
 		    "path" : "pages/notice/notice",
 		    "style" : {
 				"navigationBarTitleText": "通知"
@@ -19,15 +25,11 @@
 			}
 		}
 	    
-        ,{
-            "path" : "common/mixins/mixins",
-            "style" : {}
-        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "test",
-		"navigationBarBackgroundColor": "#F8F8F8",
+		"navigationBarBackgroundColor": "#fff",
 		"backgroundColor": "#F8F8F8"
 	}
 }
