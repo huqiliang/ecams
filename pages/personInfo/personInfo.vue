@@ -33,30 +33,35 @@
 	}
 </script>
 
-<style scoped lang="stylus">
-.notice
-	background-color #f7f9fa
-	padding-top 32rpx
-	padding-bottom 94rpx
-	.notice-cell-container
-		margin-bottom 32rpx
-		background-color #fff
-		.cell-title 
-			>>> text
-				font-family PingFangSC-Regular
-				font-size 32rpx
-				color red
-				text-align right
-	.login-out
-		position fixed
-		bottom 0
-		width 100%
-		height 94rpx
-		background #F74E41
-		font-family PingFangSC-Regular
-		font-size 34rpx
-		color #FFFFFF
-		border-radius 0
-		text-align center
-		line-height 94rpx
+<style scoped lang="less">
+.notice {
+	background-color: #f7f9fa;
+	padding-top: 32rpx;
+	padding-bottom: 94rpx;
+	.notice-cell-container{
+		margin-bottom: 32rpx;
+		background-color: #fff;
+		.cell-title {
+			/deep/ text{
+				font-family: PingFangSC-Regular;
+				font-size: 32rpx;
+				color: red;
+				text-align: right;
+				}
+		}
+	}
+	.login-out{
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		height: 94rpx;
+		background: #F74E41;
+		font-family: PingFangSC-Regular;
+		font-size: 34rpx;
+		color: #FFFFFF;
+		border-radius: 0;
+		text-align: center;
+		line-height: 94rpx;
+	}
+}
 </style>

@@ -22,6 +22,6 @@
 	}
 </script>
 
-<style scoped lang="stylus">
+<style scoped lang="less">
 	
 </style>

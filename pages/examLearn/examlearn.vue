@@ -55,8 +55,30 @@
 				<scroll-view scroll-y style="height: 100%;width: 100%;" >
 					<view class="scroll-items" style="background-color: #F7F9FA;">
 						<view class="scroll-item-text-box">
+							<view class="konwleage-base uni-flex">
+								<view class="konwleage-base-left flex-item">
+									<image class="konwleage-base-left-image"></image>
+								</view>
+								<view class="konwleage-base-right flex-item">
+									<text class="konwleage-base-right-title">1</text>
+									<text class="konwleage-base-right-time">2</text>
+									<view class="konwleage-base-right-features uni-flex">
+										<view class="konwleage-base-right-features-read flex-item">
+											<image class="konwleage-base-right-features-image" src="../../static/icon_eye@2x.png"></image>
+											<text>3</text>
+										</view>
+										<view class="konwleage-base-right-features-like flex-item">
+											<image class="konwleage-base-right-features-image" src="../../static/icon_like@2x.png"></image>
+											<text>4</text>
+										</view>
+										<view class="konwleage-base-right-features-reply flex-item">
+											<image class="konwleage-base-right-features-image" src="../../static/icon_message@2x.png"></image>
+											<text>5</text>
+										</view>
+									</view>
+								</view>
+							</view>
 							
-									<uni-list-item title="列表右侧带箭头" />
 							
 						</view>
 					</view>
@@ -134,8 +156,9 @@
 	}
 </script>
 
-<style scoped>
-	.QS-tabs-box{
+<style scoped lang="less">
+	@import '../../common/mixins.less';
+	.QS-tabs-box {
 		width: 100%;
 		position: sticky;
 		top: 0;
@@ -146,14 +169,14 @@
 	.swiper-item{
 		background-color: #fff;
 	}
-	.scroll-items{
+	.scroll-items {
 		display: flex;
 		flex-direction: column;
 		width: 100%;
 		padding: 32rpx;
 		box-sizing: border-box;
 	}
-	.scroll-item{
+	.scroll-item {
 		margin-top: 15rpx;
 		padding: 25rpx;
 		background-color: white;
@@ -163,10 +186,10 @@
 		flex-direction: row;
 		border: 1px solid #f8f8f8;
 	}
-	.scroll-item-image-box{
+	.scroll-item-image-box {
 		flex-grow: 0;
 	}
-	.scroll-item-text-box{
+	.scroll-item-text-box {
 		flex-grow: 1;
 		display: flex;
 		flex-direction: column;
@@ -175,7 +198,7 @@
 		font-weight: bold;
 		
 	}
-	.scroll-item-image{
+	.scroll-item-image {
 		border-radius: 4rpx;
 		width: 180rpx;
 		height: 150rpx;
@@ -193,16 +216,17 @@
 		text-align: center;
 	}
 	
-	.card-title text{
-		width: 85%;
-		display:block;
-		/* box-sizing: border-box;
-		padding:10rpx; */
-		font-family: PingFangSC-Semibold;
-		font-size: 32rpx;
-		color: #FFFFFF;
-		
-		
+	.card-title {
+		text{
+			width: 85%;
+			display:block;
+			/* box-sizing: border-box;
+			padding:10rpx; */
+			font-family: PingFangSC-Semibold;
+			font-size: 32rpx;
+			color: #FFFFFF;
+			.no-wrap();
+		}
 	}
 	.card-time {
 		margin:4rpx 0 6rpx ;
@@ -227,6 +251,21 @@
 		font-size: 64rpx;
 		color: #FFFFFF;
 		text-align: center;
+	}
+	.konwleage-base-left {
+		width: 160rpx;
+		height: 160rpx;
+		padding-right:16rpx;
+		background:#fff;
+	}
+	.konwleage-base-left-image{
+		width: 160rpx;
+		height: 160rpx;
+		border:1px solid #007AFF
+	}
+	.konwleage-base-right-features-image{
+		width:24rpx;
+		height:24rpx;
 	}
 	.card-button{
 		width: 224rpx;

@@ -1,10 +1,11 @@
 
 
 /*通用 */
-*{
+page {
 	box-sizing: border-box;
 }
 view{
+	box-sizing: border-box;
 	font-size:28upx;
 	line-height:1.8;
 }
