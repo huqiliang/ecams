@@ -89,10 +89,10 @@
 					background-repeat: no-repeat;
 					background-position: center center;
 					background-size: 36rpx 36rpx;
-					image {
-						width: 36rpx;
-						height: 36rpx;
-					}
+					// image {
+					// 	width: 36rpx;
+					// 	height: 36rpx;
+					// }
 				}
 			}
 		}
