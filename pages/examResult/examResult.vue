@@ -35,10 +35,10 @@
 		
 		<view class="cooperative-group uni-flex">
 			<view class="uni-flex-item button-to-index">
-				<button>返回首页</button>
+				<button @click="goToIndex">返回首页</button>
 			</view>
 			<view class="uni-flex-item button-view-result">
-				<button>查看答题结果</button>
+				<button @click="viewResult">查看答题结果</button>
 			</view>
 		</view>
 	</view>
@@ -61,6 +61,24 @@
 			resultText(){
 				return this.isPass ? "恭喜通过本次考试！" :"很遗憾，未通过"
 			}
+		},
+		methods:{
+			goToIndex() {
+				
+				const config = {
+					url:"../examLearn/examLearn",
+					success:()=>{
+						console.log('success',arguments)
+					},
+					fail:(err) => {
+						console.log("fail",err)
+					}
+				}
+				uni.navigateTo(config)
+			},
+			viewResult() {
+				
+			}
 		}
 	}
 </script>
@@ -72,7 +90,7 @@
 			width:100%;
 			// height:252rpx;
 			margin-bottom: 64rpx;
-			
+			padding-top:32rpx;
 			
 			.pass {
 				.bg-image("../static/pass")
@@ -83,7 +101,7 @@
 			.exam-result-image{
 				width:280rpx;
 				height:252rpx;
-				margin: 32rpx auto 0;
+				margin: 0 auto 0;
 				
 				background-size: 100%;
 				background-position: center center;

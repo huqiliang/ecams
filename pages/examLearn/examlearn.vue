@@ -120,7 +120,8 @@
 			}
 		},
 		onLoad() {
-			this.getTPList();
+			
+			// this.getTPList();
 		},
 		methods: {
 			async getTPInfo(id) {
