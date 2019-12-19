@@ -91,6 +91,15 @@
 				}
 			};
 		},
+		onLoad() {
+			uni.getSystemInfo({
+				success:(res)=>{
+					console.log(res)
+				}
+			})
+			
+			
+		},
 		methods:{
 			formSubmit() {
 				alert('submit')
