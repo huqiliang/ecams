@@ -1,6 +1,15 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-				
+				{
+				    "path" : "pages/examStart/examStart",
+				    "style" : {}
+				},
+				{
+					"path" : "pages/transferApplication/transferApplication",
+					"style": {
+						"navigationBarTitleText": "调班申请"
+					}
+				},
 				{
 					"path" : "pages/personIndex/personIndex",
 					"style" : {
@@ -48,12 +57,7 @@
 						"navigationBarTitleText": "考试学习"
 					}
 				},
-				{
-					"path" : "pages/transferApplication/transferApplication",
-					"style": {
-						"navigationBarTitleText": "调班申请"
-					}
-				},
+				
 				{
 					"path" : "pages/notice/notice",
 					"style" : {
@@ -67,6 +71,7 @@
 						"navigationBarTitleText": "index"
 					}
 				}
+        
         
     ],
 	"globalStyle": {

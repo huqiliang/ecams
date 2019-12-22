@@ -1,6 +1,6 @@
 <template>
 	<view class="cell-wrapper" hover-class="hover-class">
-		<view class="cell-container uni-flex uni-inline-item">
+		<view :class="[{'cell-container-bottom':border},'cell-container', 'uni-flex' ,'uni-inline-item']">
 			<view class="cell-title uni-flex-item">
 				<text class="cell-title-text" v-if="title">{{title}}</text>
 				<view v-else>
@@ -8,13 +8,12 @@
 				</view>
 			</view>
 			<view class="cell-right-content uni-flex-item  uni-inline-item">
-				<text  v-if="content">{{content}}</text>
+				<text v-if="content">{{content}}</text>
 				<view v-else>
 					<slot name="right-content"></slot>
 				</view>
 				<view :class="[{'arrow-img':arrow} ,'arrow',  'uni-inline-item']"  ></view>
 			</view>
-			
 		</view>
 	</view>
 </template>
@@ -33,6 +32,10 @@
 			arrow:{
 				type:Boolean,
 				default:true
+			},
+			border:{
+				type:Boolean,
+				default:true
 			}
 		},
 		data() {
@@ -49,14 +52,16 @@
 		background-color: #ffffff;
 		height: 104rpx;
 		padding-left: 32rpx;
+		.cell-container-bottom {
+			.border-bottom-1px(2rpx,solid,#eee);
+		}
 		.cell-container{
 			box-sizing: border-box;
 			position: relative;
 			width: 100%;
+			justify-content: space-around;
 			height: 104rpx;
-			justify-content: space-arround;
 			
-			.border-bottom-1px(2rpx,solid,#eee);
 			.cell-title {
 				
 				.no-wrap();
