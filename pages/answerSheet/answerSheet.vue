@@ -16,13 +16,15 @@
 				</view>
 			</view>
 		</view>
-		<view class="uni-flex">
-			<view class="uni-flex-item" v-for="(answer,index) in answerList" :key="index">
-				<view class="">
-					<text>{{index}}{{answerSheetMap[answer.status]}}</text>
+		
+		<view class="uni-flex  answer-sheet-list" >
+			<view class=" uni-flex-item" v-for="(answer,index) in answerList" :key="index">
+				<view class="answer-sheet-circle">
+					<text>{{index}}</text>
 				</view>
 			</view>
 		</view>
+		
 	</view>
 </template>
 
@@ -128,6 +130,28 @@
 	.un-complete-notDone {
 		border:2rpx solid #F5F5F5;
 		background-color:#FFFFFF
+	}
+	.answer-sheet-list {
+		justify-content: space-around;
+		align-items: center;
+		.answer-sheet-circle {
+			width: 96rpx;
+			height: 96rpx;
+			line-height: 96rpx;
+			border-radius: 50%;
+			background: #FFFFFF;
+			text-align: center;
+			border: 1px solid #36C892;
+			margin: 0 auto;
+
+			text{
+				font-family: PingFangSC-Regular;
+				font-size: 32rpx;
+				color: #333333;
+				letter-spacing: 0;
+				
+			}
+		}
 	}
 }
 </style>
