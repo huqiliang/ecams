@@ -29,19 +29,19 @@
 						<view class="scroll-item-text-box">
 							 <view class="uni-flex uni-row" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;justify-content:space-between;">
 								 
-								<view class="flex-item" style="margin-bottom:32rpx;" v-for="(item,index) in testpaperList" :key="item.tpId">
+								<view class="flex-item" style="margin-bottom:32rpx;" v-for="(item,index) in examList" :key="item.tpId">
 									<Card>
 										<view class="ornament"></view>
 										<view class="card-title">
-											<text>{{item.tpName}}</text>
+											<text>{{item.examName}}</text>
 										</view>
 										<view class="card-time">
-											<text>2019-10-22 16:04</text>
+											<text>{{item.durationStart}}</text>
 										</view>
 										<view class="card-mark">
-											<text >80.0</text>
+											<text >{{item.passingMark}}</text>
 										</view>
-										<button @click="getTPInfo(item.tpId)" class="card-button card-button-view">查看</button>
+										<button @click="getExamInfo(item.examId)" class="card-button card-button-view" >查看</button>
 									</Card>
 								</view>
 								
@@ -52,26 +52,31 @@
 				</scroll-view>
 			</swiper-item>
 			<swiper-item class="swiper-item">
-				<scroll-view scroll-y style="height: 100%;width: 100%;" >
-					<view class="scroll-items" style="background-color: #F7F9FA;">
+				<scroll-view scroll-y style="height: 100%;width: 100%;box-sizing: border-box;" >
+					<cell class="" title="学习课件" content="查看全部" :border="false"></cell>
+					<view class="scroll-items" style="background-color: #FFFFFF;margin-bottom:80rpx;">
 						<view class="scroll-item-text-box">
 							<view class="konwleage-base uni-flex">
 								<view class="konwleage-base-left flex-item">
 									<image class="konwleage-base-left-image"></image>
 								</view>
 								<view class="konwleage-base-right flex-item">
-									<text class="konwleage-base-right-title">1</text>
-									<text class="konwleage-base-right-time">2</text>
+									<view class="konwleage-base-right-title">
+										<text class="konwleage-base-right-title-text">急性心肌梗死的院前急救</text>
+									</view>
+									<view class="konwleage-base-right-time">
+										<text class="konwleage-base-right-time-text">2019-11-22 16:04</text>
+									</view>
 									<view class="konwleage-base-right-features uni-flex">
-										<view class="konwleage-base-right-features-read flex-item">
+										<view class="konwleage-base-right-features-read konwleage-base-right-features-icon flex-item">
 											<image class="konwleage-base-right-features-image" src="../../static/icon_eye@2x.png"></image>
 											<text>3</text>
 										</view>
-										<view class="konwleage-base-right-features-like flex-item">
+										<view class="konwleage-base-right-features-like konwleage-base-right-features-icon flex-item">
 											<image class="konwleage-base-right-features-image" src="../../static/icon_like@2x.png"></image>
 											<text>4</text>
 										</view>
-										<view class="konwleage-base-right-features-reply flex-item">
+										<view class="konwleage-base-right-features-reply konwleage-base-right-features-icon flex-item">
 											<image class="konwleage-base-right-features-image" src="../../static/icon_message@2x.png"></image>
 											<text>5</text>
 										</view>
@@ -93,7 +98,7 @@
 	import QSTabs from '@/components/QS-tabs/QS-tabs.vue';
 	import api from "../../server/index.js"
 	import {ERR_OK} from "@/utils/config.js"
-	
+	import cell from "@/components/Cell/CellItem"
 	import {uniList,uniListItem } from '@dcloudio/uni-ui'
 	const Sys = uni.getSystemInfoSync();
 	const wH = Sys.windowHeight;
@@ -101,6 +106,7 @@
 	const swiperHeight = `${(wH - 44-8)*2}rpx`;
 	export default {
 		components: {
+			cell,
 			QSTabs,
 			Card,
 			uniList,
@@ -116,27 +122,36 @@
 					current: 0 ,
 					height:swiperHeight
 				},
-				testpaperList:[]
+				examList:[],
+				userId:"1"
 			}
 		},
 		onLoad() {
-			
-			// this.getTPList();
+			this.getMyExam(this.userId);
 		},
 		methods: {
-			async getTPInfo(id) {
-				const data = await api.examLearn.getTPInfo(id);
+			async getExamInfo(examId) {
+				const data = await api.examLearn.getExamInfo(examId);
 				if(data.errorCode === ERR_OK) {
-					console.log(data);
+					
+					const config = {
+						url:`../examStart/examStart?examInfo=${encodeURIComponent(JSON.stringify(data.examInfo))}&userId=${this.userId}`,
+						success:()=>{
+							console.log('success',arguments)
+						},
+						fail:(err) => {
+							console.log("fail",err)
+						}
+					}
+					uni.navigateTo(config)
 				}
 			},
-			async getTPList() {
-				const data = await api.examLearn.getTPList();
+			async getMyExam(userId) {
 				
-				if(data[1].data.errorCode === ERR_OK) {
-					
-					this.testpaperList = data[1].data.testpaperList;
-					console.log(data[1].data.testpaperList);
+				const data = await api.examLearn.getMyExam(userId);
+				console.log(data)
+				if(data.errorCode === ERR_OK) {
+					this.examList = data.examList;
 				}
 			},
 			tabsChange(index) {
@@ -256,17 +271,70 @@
 	.konwleage-base-left {
 		width: 160rpx;
 		height: 160rpx;
-		padding-right:16rpx;
+		margin-right:16rpx;
 		background:#fff;
 	}
 	.konwleage-base-left-image{
 		width: 160rpx;
 		height: 160rpx;
-		border:1px solid #007AFF
+		background: #EFF1F2;
+	}
+	.konwleage-base-right {
+		width:100%;
+	}
+	.konwleage-base-right-title{
+		font-size: 0;
+		margin-bottom:16rpx;
+		height: 44rpx;
+		line-height: 44rpx;
+	}
+	.konwleage-base-right-title-text {		
+		font-family: PingFangSC-Regular;
+		font-size: 32rpx;
+		
+		color: #333333;
+		letter-spacing: 0;
+		
+	}
+	.konwleage-base-right-time {
+		font-size:0;
+		margin-bottom: 30rpx;
+		height: 34rpx;
+		line-height: 34rpx;
+	}
+	.konwleage-base-right-time-text {
+		font-family: PingFangSC-Regular;
+		font-size: 24rpx;
+		color: #999999;
+		letter-spacing: 0;
+		
+	}
+	.konwleage-base-right-features {
+		width:100%;
+		justify-content: flex-end;
+		height: 24rpx;
+		line-height: 24rpx;
+		// text-align: right;
 	}
 	.konwleage-base-right-features-image{
 		width:24rpx;
 		height:24rpx;
+	}
+	.konwleage-base-right-features-read {
+		margin-right:24rpx;
+	}
+	.konwleage-base-right-features-like{
+		margin-right:24rpx;
+	}
+	.konwleage-base-right-features-icon  {
+		text {
+			font-family: PingFangSC-Regular;
+			font-size: 24rpx;
+			color: #999999;
+			letter-spacing: 0;
+			
+			
+		}
 	}
 	.card-button{
 		width: 224rpx;

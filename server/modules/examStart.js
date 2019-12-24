@@ -18,21 +18,23 @@ const request  = (url,data,method="post") => {
 		});
 	})
 };
-export const getMyExam = (userId) => {
+
+export const startExam = (userId,examId) => {
 	const data = {
-		userId
-	}
-	return request(`${baseURL}/Business/serviceInterface/getMyExam.json`,data)
-}
-export const getExamInfo = (examId) => {
-	const data = {
+		userId,
 		examId
 	}
-	return request(`${baseURL}/Business/serviceInterface/getExamInfo.json`,data)
+	return request(`${baseURL}/Business/serviceInterface/startExam.json`,data)
+}
+export const getExamDetail = (userId,examId) => {
+	const data = {
+		userId,
+		examId
+	}
+	return request(`${baseURL}/Business/serviceInterface/getExamDetail`,data)
 }
 
-
 export default {
-	getMyExam,
-	getExamInfo
+	startExam,
+	getExamDetail
 }

@@ -1,6 +1,18 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 				{
+					"path" : "pages/answerSheet/answerSheet",
+					"style": {
+						"navigationBarTitleText": "答题卡"
+					}
+				},
+				{
+					"path" : "pages/examLearn/examLearn",
+					"style" : {
+						"navigationBarTitleText": "考试学习"
+					}
+				},
+				{
 				    "path" : "pages/examStart/examStart",
 				    "style" : {}
 				},
@@ -39,24 +51,14 @@
 						"navigationBarTitleText": "个人信息"
 					}
 				},
-				{
-					"path" : "pages/answerSheet/answerSheet",
-					"style": {
-						"navigationBarTitleText": "答题卡"
-					}
-				},
+				
 				{
 					"path" : "pages/examResult/examResult",
 					"style": {
 						"navigationBarTitleText": "考试结果"
 					}
 				},
-				{
-					"path" : "pages/examLearn/examLearn",
-					"style" : {
-						"navigationBarTitleText": "考试学习"
-					}
-				},
+				
 				
 				{
 					"path" : "pages/notice/notice",

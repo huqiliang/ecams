@@ -1,25 +1,27 @@
 <template>
 	<view class="answer-sheet">
-		<view class="answer-sheet-type-tip">
-			<view class="uni-flex">
-				<view class="uni-flex-item">
-					<text :class="[answerSheetMap[''],'dot-tip']"></text>
-					<text></text>
+		<view class="answer-sheet-type-tip ">
+			
+				<view class=" answer-sheet-type-tip-item">
+					
+					<text :class="[(answerSheetTipMap.style)[0],'dot-tip']"></text>
+					<text class="answer-sheet-type-tip-item-text">{{(answerSheetTipMap.state)[0]}}</text>
 				</view>
-				<view class="uni-flex-item">
-					<text class="dot-tip"></text>
-					<text></text>
+				<view class=" answer-sheet-type-tip-item">
+					<text :class="[(answerSheetTipMap.style)[1],'dot-tip']"></text>
+					<text class="answer-sheet-type-tip-item-text">{{(answerSheetTipMap.state)[1]}}</text>
 				</view>
-				<view class="uni-flex-item">
-					<text class="dot-tip"></text>
-					<text></text>
+				<view class=" answer-sheet-type-tip-item">
+					<text :class="[(answerSheetTipMap.style)[2],'dot-tip']"></text>
+					<text class="answer-sheet-type-tip-item-text">{{(answerSheetTipMap.state)[2]}}</text>
 				</view>
-			</view>
+			
 		</view>
 		
 		<view class="uni-flex  answer-sheet-list" >
 			<view class=" uni-flex-item" v-for="(answer,index) in answerList" :key="index">
-				<view class="answer-sheet-circle">
+				
+				<view :class="['answer-sheet-circle', (answerSheetMap.style)[answer.status]]">
 					<text>{{index}}</text>
 				</view>
 			</view>
@@ -29,20 +31,6 @@
 </template>
 
 <script>
-	const completeStyle = {
-		notDone:'complete-not-done',
-		correct:'complete-correct',
-		error:'complete-error'
-	}
-	const unCompleteStyle = {
-		current:'un-complete-current', 
-		done: 'un-complete-done',  
-		notDone: 'un-complete-not-done',
-	}
-	
-	const dotTipMap = {
-		
-	}
 	
 	export default {
 		props:{
@@ -50,46 +38,99 @@
 		data() {
 			return {
 				//答题卡是已完成还是未完成的答题卡
-				isComplete:false,
+				isComplete:true,
 				answerList:[
 					{
-						status:"0"
+						status:"correct"
 					},
 					{
-						status:"1"
+						status:"correct"
 					},
 					{
-						status:"2"
+						status:"error"
 					},
 					{
-						status:"0"
+						status:"notDone"
 					}
-				]
+				],
+				
+				
 			};
 		},
 		onLoad(option){
 		},
 		computed:{
 			// 返回是完成还是未完成状态的样式
+			answerSheetTipMap () {
+				if(this.isComplete) {
+					return this.completeTip;
+				}else{
+					return this.unCompleteTip;
+				}
+			},
+			completeTip (){
+				return {
+					style : {
+						0:'complete-correct',
+						1:'complete-error',
+						2:'complete-not-done',
+					},
+					state:{
+						0:"正确",
+						1:"错误",
+						2:"未做"
+					}
+				}
+			},
+			unCompleteTip (){
+				return {
+					style : {
+						0: 'un-complete-current', 
+						1: 'un-complete-done',  
+						2: 'un-complete-not-done',
+					},
+					state:{
+						
+						0:"当前",
+						1:"已做",
+						2:"未做"
+					}
+				}
+			},
 			answerSheetMap () {
 				if(this.isComplete) {
-					return this.completeState;
+					return this.complete;
 				}else{
-					return this.unCompleteState;
+					return this.unComplete;
 				}
 			},
-			completeState (){
+			complete(){
 				return {
-					0:"正确",
-					1:"错误",
-					2:"未做"
+					style : {
+						correct:'complete-correct',
+						error:'complete-error',
+						notDone:'complete-not-done',
+					},
+					state:{
+						0:"正确",
+						1:"错误",
+						2:"未做"
+					}
 				}
 			},
-			unCompleteState (){
+			unComplete(){
 				return {
-					0:"当前",
-					1:"已做",
-					2:"未做"
+					style : {
+						current:'un-complete-current', 
+						done: 'un-complete-done',  
+						notDone: 'un-complete-not-done',
+					},
+					state:{
+						
+						0:"当前",
+						1:"已做",
+						2:"未做"
+					}
 				}
 			}
 		}
@@ -100,36 +141,31 @@
 .answer-sheet {
 	
 	.answer-sheet-type-tip {
-		
-		.dot-tip{
-			width: 24rpx;
-			height: 24rpx;
-			border-radius: 50%;
+		height: 84rpx;
+		display: block;
+			
+		.answer-sheet-type-tip-item {
+			display: inline-block;
+			width:120rpx;
+			height: 84rpx;
+			padding:16rpx 0  32rpx 32rpx;
+			.answer-sheet-type-tip-item-text{
+				font-family: PingFangSC-Regular;
+				font-size: 24rpx;
+				color: #333333;
+				letter-spacing: 0;
+				
+				line-height: 36rpx;
+			}
+			.dot-tip{
+				vertical-align: middle;
+				display: inline-block;
+				margin-right:8rpx;
+				width: 24rpx;
+				height: 24rpx;
+				border-radius: 50%;
+			}
 		}
-	}
-	.complete-not-done {
-		border:2rpx solid #F5F5F5;
-		background-color:#F5F5F5
-	}
-	.complete-correct {
-		border:2rpx solid #36C892;
-		background-color:#36C892
-	}
-	.complete-error {
-		border: 2rpx solid #F5F5F5;
-		background-color:#FFFFFF
-	}
-	.un-complete-current {
-		border:2rpx solid #F5F5F5;
-		background-color:#F5F5F5
-	}
-	.un-complete-done {
-		border:2rpx solid #36C892;
-		background-color:#FFFFFF
-	}
-	.un-complete-notDone {
-		border:2rpx solid #F5F5F5;
-		background-color:#FFFFFF
 	}
 	.answer-sheet-list {
 		justify-content: space-around;
@@ -139,19 +175,54 @@
 			height: 96rpx;
 			line-height: 96rpx;
 			border-radius: 50%;
-			background: #FFFFFF;
+			// background: #FFFFFF;
 			text-align: center;
-			border: 1px solid #36C892;
+			// border: 1px solid #36C892;
 			margin: 0 auto;
-
+	
 			text{
 				font-family: PingFangSC-Regular;
 				font-size: 32rpx;
-				color: #333333;
+				
 				letter-spacing: 0;
 				
 			}
 		}
 	}
+	.complete-not-done {
+		text {
+			
+			color: #333333;
+		}
+		border:2rpx solid #F5F5F5;
+		background-color:#F5F5F5
+	}
+	.complete-correct {
+		text {
+			color:#FFFFFF;
+		}
+		border:2rpx solid #36C892;
+		background-color:#36C892
+	}
+	.complete-error {
+		text {
+			color:#FFFFFF;
+		}
+		border: 2rpx solid #F5F5F5;
+		background-color:#F74E41
+	}
+	.un-complete-current {
+		border:2rpx solid #F5F5F5;
+		background-color:#F5F5F5
+	}
+	.un-complete-done {
+		border:2rpx solid #36C892;
+		background-color:#FFFFFF
+	}
+	.un-complete-not-done {
+		border:2rpx solid #F5F5F5;
+		background-color:#FFFFFF
+	}
+	
 }
 </style>

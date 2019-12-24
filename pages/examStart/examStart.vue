@@ -1,19 +1,19 @@
 <template>
 	<view class="exam-start">
-		<form @submit="formSubmit" @reset="formReset">
+		
 			<cell class="exam-start-cell" title="考试时长"  :arrow="false">
 				<view class="exam-start-cell-right-content" slot="right-content">
-					<text>2个小时</text>
+					<text>{{examInfo.timeLimit}}分钟</text>
 				</view>
 			</cell>
-			<cell class="exam-start-cell" title="考试时长"  :arrow="false">
+			<cell class="exam-start-cell" title="考试总分"  :arrow="false">
 				<view class="exam-start-cell-right-content" slot="right-content">
 					<text>100分</text>
 				</view>
 			</cell>
 			<cell class="exam-start-cell" title="及格分数"  :arrow="false">
 				<view class="exam-start-cell-right-content" slot="right-content">
-					<text>60分</text>
+					<text>{{examInfo.passingMark}}分</text>
 				</view>
 			</cell>
 			<cell class="exam-start-cell" title="题目数量"  :arrow="false">
@@ -23,12 +23,14 @@
 			</cell>
 
 			
-			<button form-type="submit" class="exam-start-button">提交</button>
-		</form>	
+			<button @click="startExam(userId,examInfo.examId)" class="exam-start-button">开始考试</button>
+		
 	</view>
 </template>
 
 <script>
+	import api from "../../server/index.js"
+	import {ERR_OK} from "@/utils/config.js"
 	import cell from "@/components/Cell/CellItem.vue"
 	export default {
 		components:{
@@ -36,15 +38,43 @@
 		},
 		data() {
 			return {
-				transferApplication:{
-					type:"",
-					date:"",
-					
-				},
-				formSelectList:{
-					postList:[]
-				}
+				examInfo:{},
+				userId:""
 			};
+		},
+		onLoad(option) {
+			console.log(option)
+			this.examInfo = JSON.parse(decodeURIComponent(option.examInfo));
+			this.userId = option.userId;
+			this.setTitle(this.examInfo.examName);
+		},
+		methods:{
+			setTitle(title) {
+				uni.setNavigationBarTitle({
+					title,
+				})
+			},
+			async getExamDetail(userId,examId) {
+				const res = await api.examStart.getExamDetail(userId,examId);
+				if(res.errorCode === ERR_OK) {
+					const config = {
+						url:``,
+						success:()=>{
+							
+						},
+						fail:(err) => {
+							console.log("fail",err)
+						}
+					}
+					uni.navigateTo(config)
+				}
+			},
+			async startExam(userId,examId) {
+				const res =await api.examStart.startExam(userId,examId)
+				if(res.errorCode === ERR_OK) {
+					await this.getExamDetail(userId,examId)
+				}
+			}
 		}
 	}
 </script>
