@@ -62,7 +62,7 @@
 		<view class="person-index-main">
 			<view class="person-index-main-wrapper">
 				<view class="person-index-main-bar uni-flex">
-					<view class="bar-item uni-flex-item" v-for="item in barList">
+					<view class="bar-item uni-flex-item" :key='item.name' v-for="item in barList">
 						<view class="">
 							<image class="bar-item-image" :src="item.icon" mode=""></image>
 						</view>

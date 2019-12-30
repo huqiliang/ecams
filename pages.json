@@ -1,6 +1,16 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 				{
+					"path" : "pages/personIndex/personIndex",
+					"style" : {
+						"navigationBarTitleText": "个人首页",
+						"navigationBarBackgroundColor":"#4BDB9B",
+						"navigationBarTextStyle":"white",
+						"navigationStyle":"custom"
+						
+					}
+				},
+				{
 					"path" : "pages/answerSheet/answerSheet",
 					"style": {
 						"navigationBarTitleText": "答题卡"
@@ -22,16 +32,7 @@
 						"navigationBarTitleText": "调班申请"
 					}
 				},
-				{
-					"path" : "pages/personIndex/personIndex",
-					"style" : {
-						"navigationBarTitleText": "个人首页",
-						"navigationBarBackgroundColor":"#4BDB9B",
-						"navigationBarTextStyle":"white",
-						"navigationStyle":"custom"
-						
-					}
-				},
+				
 				{
 					"path" : "pages/identityAuth/identityAuth",
 					"style" : {
