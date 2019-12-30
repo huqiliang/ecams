@@ -13,9 +13,11 @@
 			</view>
 			<view class="person-user-info uni-flex" :style="{'padding-top':nav_bar_wrapper_height}">
 				<view class="person-user-info-left  uni-flex">
-					<view class="avart">
-						<image></image>
-					</view>
+					<navigator url="../personInfo/personInfo" animationType='pop-in' animationDuration="200" >
+						<view class="avart">
+							<image></image>
+						</view>
+					</navigator>
 					<view class="area">
 						<view class="name">
 							<text>孙婧</text>
@@ -63,12 +65,14 @@
 			<view class="person-index-main-wrapper">
 				<view class="person-index-main-bar uni-flex">
 					<view class="bar-item uni-flex-item" :key='item.name' v-for="item in barList">
-						<view class="">
-							<image class="bar-item-image" :src="item.icon" mode=""></image>
-						</view>
-						<view class="">
-							<text class="bar-item-text">{{item.name}}</text>
-						</view>
+						<navigator :url="item.link" hover-class="navigator-hover">
+							<view class="">
+								<image class="bar-item-image" :src="item.icon" mode=""></image>
+							</view>
+							<view class="">
+								<text class="bar-item-text">{{item.name}}</text>
+							</view>
+						</navigator>
 					</view>
 				</view>
 				
@@ -94,22 +98,23 @@
 		data() {
 			return {
 				barList:[
-					{
-						icon:"../../static/icon_pbb@3x.png",
-						name:"排班表"
-					},
+					// {
+					// 	icon:"../../static/icon_pbb@3x.png",
+					// 	name:"排班表"
+					// },
 					{
 						icon:"../../static/icon_ks@3x.png",
-						name:"考试学习"
+						name:"考试学习",
+						link:"/pages/examLearn/examLearn"
 					},
-					{
-						icon:"../../static/icon_hy@3x.png",
-						name:"会议"
-					},
-					{
-						icon:"../../static/icon_ywpm@3x.png",
-						name:"业务排名"
-					}
+					// {
+					// 	icon:"../../static/icon_hy@3x.png",
+					// 	name:"会议"
+					// },
+					// {
+					// 	icon:"../../static/icon_ywpm@3x.png",
+					// 	name:"业务排名"
+					// }
 				]
 			};
 		},
