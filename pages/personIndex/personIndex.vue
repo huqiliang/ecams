@@ -20,7 +20,7 @@
 					</navigator>
 					<view class="area">
 						<view class="name">
-							<text>孙婧</text>
+							<text>{{userInfo.userName}}</text>
 						</view>
 						<view>
 							<text class="station1">城南站 </text>
@@ -39,7 +39,7 @@
 			<view class="diligence uni-flex-item" >
 				<view class="diligence-number">
 					<text>
-						1056
+						{{userInfo.diligence}}
 					</text>
 				</view>
 				<view class="diligence-text">
@@ -91,6 +91,7 @@
 
 <script>
 	import personStep from "./personStep.vue"
+	
 	export default {
 		components:{
 			personStep
@@ -98,27 +99,30 @@
 		data() {
 			return {
 				barList:[
-					// {
-					// 	icon:"../../static/icon_pbb@3x.png",
-					// 	name:"排班表"
-					// },
+					{
+						icon:"../../static/icon_pbb@3x.png",
+						name:"排班表"
+					},
 					{
 						icon:"../../static/icon_ks@3x.png",
 						name:"考试学习",
 						link:"/pages/examLearn/examLearn"
 					},
-					// {
-					// 	icon:"../../static/icon_hy@3x.png",
-					// 	name:"会议"
-					// },
-					// {
-					// 	icon:"../../static/icon_ywpm@3x.png",
-					// 	name:"业务排名"
-					// }
+					{
+						icon:"../../static/icon_hy@3x.png",
+						name:"会议"
+					},
+					{
+						icon:"../../static/icon_ywpm@3x.png",
+						name:"业务排名"
+					}
 				]
 			};
 		},
 		computed:{
+			userInfo(){
+				return uni.getStorageSync('userInfo')
+			},
 			nav_bar_wrapper_height() {
 				const nav_bar_wrapper_height = 
 				 uni.getSystemInfoSync().statusBarHeight + 44 + 'px';
@@ -133,7 +137,7 @@
 				return uni.getSystemInfoSync().statusBarHeight + 'px';
 			}
 
-		}
+		},
 	}
 </script>
 
