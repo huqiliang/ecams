@@ -10,8 +10,14 @@ export const userHomePageInfo = (userId,wechatNo) => {
 
 export const userAuth = (wechatNo) => {
 	return request(`${baseURL}/Business/serviceInterface/userAuth.json`,{
-		userId:"1",
 		wechatNo
+	})
+}
+
+//按个人查询通知列表
+export const userWechatMessage = (userId) => {
+	return request(`${baseURL}/Business/serviceInterface/userWechatMessage.json`,{
+		userId,
 	})
 }
 export default {
