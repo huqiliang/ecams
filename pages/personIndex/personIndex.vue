@@ -18,12 +18,12 @@
 					</view>
 					<view class="area">
 						<view class="name">
-							<text>孙婧</text>
+							<text>{{userInfo.userName}}</text>
 						</view>
 						<view>
-							<text class="station1">城南站 </text>
+							<text class="station1">{{userInfo.station}} </text>
 							<text class="station2">金城分站 </text>
-							<text class="title-name">医生 </text>
+							<text class="title-name">{{userInfo.labelName}} </text>
 						</view>
 					</view>
 				</view>
@@ -37,7 +37,7 @@
 			<view class="diligence uni-flex-item" >
 				<view class="diligence-number">
 					<text>
-						1056
+						{{userInfo.systemKbn}}
 					</text>
 				</view>
 				<view class="diligence-text">
@@ -62,51 +62,58 @@
 		<view class="person-index-main">
 			<view class="person-index-main-wrapper">
 				<view class="person-index-main-bar uni-flex">
+					
 					<view class="bar-item uni-flex-item" v-for="item in barList">
-						<view class="">
-							<image class="bar-item-image" :src="item.icon" mode=""></image>
-						</view>
-						<view class="">
-							<text class="bar-item-text">{{item.name}}</text>
-						</view>
+						<navigator :url="item.url">
+							<view class="">
+								<image class="bar-item-image" :src="item.icon" mode=""></image>
+							</view>
+							<view class="">
+								<text class="bar-item-text">{{item.name}}</text>
+							</view>
+						</navigator>
 					</view>
 				</view>
 				
 			</view>
 		</view>
 		<view  class="person-index-main-step">
-			<personStep></personStep>
-			<personStep></personStep>
-			<personStep></personStep>
-			<personStep></personStep>
-			<personStep></personStep>
-			<personStep></personStep>
+			<personStep list="messageList"></personStep>
+			
 		</view>
 	</view>
 </template>
 
 <script>
+		import {ERR_OK} from "@/utils/config.js"
 	import personStep from "./personStep.vue"
+	import api from "@/server/index.js"
 	export default {
 		components:{
 			personStep
 		},
 		data() {
 			return {
+				userInfo:{},
+				messageList:[],
 				barList:[
 					{
+						url:"",
 						icon:"../../static/icon_pbb@3x.png",
 						name:"排班表"
 					},
 					{
+						url:"../examLearn/examLearn",
 						icon:"../../static/icon_ks@3x.png",
 						name:"考试学习"
 					},
 					{
+						url:"",
 						icon:"../../static/icon_hy@3x.png",
 						name:"会议"
 					},
 					{
+						url:"",
 						icon:"../../static/icon_ywpm@3x.png",
 						name:"业务排名"
 					}
@@ -114,6 +121,7 @@
 			};
 		},
 		computed:{
+			
 			nav_bar_wrapper_height() {
 				const nav_bar_wrapper_height = 
 				 uni.getSystemInfoSync().statusBarHeight + 44 + 'px';
@@ -128,6 +136,19 @@
 				return uni.getSystemInfoSync().statusBarHeight + 'px';
 			}
 
+		},
+		onLoad() {
+			this.userHomePageInfo()
+		},
+		methods:{
+			async userHomePageInfo(userId="1",wechatNo="abcd") {
+				
+				const res =await api.personInfo.userHomePageInfo(userId,wechatNo);
+				if(res.data.errorCode === ERR_OK){
+					this.userInfo = res.data.userInfo
+					this.messageList = res.data.messageList
+				}
+			}
 		}
 	}
 </script>

@@ -5,64 +5,21 @@
 				<view class="step-time-item uni-flex">
 					<view class="step-tail"></view>
 					<text class="step-time-icon"></text>
-					<text class="step-time-text">2019.11.31</text>
+					<text class="step-time-text">{{time}}</text>
 					<view class="cell-right-content uni-flex-item  uni-inline-item">
-						<view class="arrow-img arrow uni-inline-item"  ></view>
+						<view class="arrow-img arrow uni-inline-item"></view>
 					</view>
 				</view>
 			</navigator>
 		</view>
-		<view class="step-event-cell"  >
+		<view class="step-event-cell"  v-for="item in list" >
 			<navigator url="../notice/notice" hover-class="none">
 				<view class="step-event-item uni-flex">
 					<view class="step-tail"></view>
 					<view class="step-event-icon-wrapper">
-						<text class="step-event-icon calendar_check_fill-bg-image"></text>
+						<text :class="['step-event-icon',messageType[item.messageType] ]"></text>
 					</view>
-					<text class="step-event-text">排班表发布通知(11.25-11.29)</text>
-					<view class="cell-right-content uni-flex-item  uni-inline-item">
-						<view class="arrow-img arrow uni-inline-item"  ></view>
-					</view>
-				</view>
-			</navigator>
-			
-		</view>
-		<view class="step-event-cell" >
-			<navigator url="../notice/notice" hover-class="none">
-				<view class="step-event-item uni-flex">
-					<view class="step-tail"></view>
-					<view class="step-event-icon-wrapper">
-						<text class="step-event-icon file_text_fill-bg-image"></text>
-					</view>
-					<text class="step-event-text">排班表发布通知(11.25-11.29)</text>
-					<view class="cell-right-content uni-flex-item  uni-inline-item">
-						<view class="arrow-img arrow uni-inline-item"  ></view>
-					</view>
-				</view>
-			</navigator>
-		</view>
-		<view class="step-event-cell"  >
-			<navigator url="../notice/notice" hover-class="none">
-				<view class="step-event-item uni-flex">
-					<view class="step-tail"></view>
-					<view class="step-event-icon-wrapper">
-						<text class="step-event-icon sound_fill-bg-image"></text>
-					</view>
-					<text class="step-event-text">排班表发布通知(11.25-11.29)</text>
-					<view class="cell-right-content uni-flex-item  uni-inline-item">
-						<view class="arrow-img arrow uni-inline-item"  ></view>
-					</view>
-				</view>
-			</navigator>
-		</view>
-		<view class="step-event-cell" >
-			<navigator url="../notice/notice" hover-class="none">
-				<view class="step-event-item uni-flex">
-					<view class="step-tail"></view>
-					<view class="step-event-icon-wrapper">
-						<text class="step-event-icon trophy_fill-bg-image"></text>
-					</view>
-					<text class="step-event-text">排班表发布通知(11.25-11.29)</text>
+					<text class="step-event-text">{{item.wechatContent}}</text>
 					<view class="cell-right-content uni-flex-item  uni-inline-item">
 						<view class="arrow-img arrow uni-inline-item"  ></view>
 					</view>
@@ -78,12 +35,36 @@
 			
 		},
 		props:{
-			
+			list:{
+				type:Array,
+				default:()=>{
+					return []
+				}
+			}
 		},
 		data() {
 			return {
 				
 			};
+		},
+		computed:{
+			messageType(){
+				return {
+					1:"calendar_check_fill-bg-image",
+					2:"file_text_fill-bg-image",
+					3:"sound_fill-bg-image",
+					4:"trophy_fill-bg-image"
+				}
+			},
+			time(){
+				const time = this.list[0].handleTime || null;
+				const date = new Date(time);
+				const year = date.getFullYear();
+				const month = date.getMonth()+ 1;
+				const day = date.getDate();
+				return `${year}.${month}.${day}`;
+				
+			}
 		}
 	}
 </script>

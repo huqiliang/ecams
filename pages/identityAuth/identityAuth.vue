@@ -92,11 +92,49 @@
 			};
 		},
 		onLoad() {
-			uni.getSystemInfo({
-				success:(res)=>{
-					console.log(res)
-				}
-			})
+			uni.login({  
+				success: function(res) {  
+					// 获取code  
+					console.log(JSON.stringify(res));  
+				}  
+			});  
+			// const authorizeConfig = {
+			// 	scope:'scope.userInfo',
+			// 	success(){
+			// 		console.log(123)
+			// 		uni.getUserInfo({
+			// 		  provider: 'weixin',
+			// 		  success:  (infoRes) => {
+			// 			console.log(infoRes);
+			// 		  }
+			// 		})
+			// 	}
+			// }
+			// uni.authorize({
+			//     scope: 'scope.userInfo',
+			//     success() {
+			//         uni.getUserInfo({
+			//           provider: 'weixin',
+					  
+			// 		   withCredentials:true,    
+			//           success:  (infoRes) => {
+			//         	console.log(infoRes);
+			//           }
+			//         })
+			//     }
+			// })
+			// uni.getUserInfo({
+			//   provider: 'weixin',
+			//    withCredentials:true,    
+			//   success:  (infoRes) => {
+			// 	console.log(infoRes);
+			//   }
+			// })
+			// uni.getSystemInfo({
+			// 	success:(res)=>{
+			// 		console.log(res)
+			// 	}
+			// })
 			
 			
 		},

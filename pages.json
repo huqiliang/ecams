@@ -1,9 +1,9 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 				{
-					"path" : "pages/answerSheet/answerSheet",
-					"style": {
-						"navigationBarTitleText": "答题卡"
+					"path" : "pages/examPaper/examPaper",
+					"style" : {
+						"navigationBarTitleText": ""
 					}
 				},
 				{
@@ -13,13 +13,15 @@
 					}
 				},
 				{
-				    "path" : "pages/examStart/examStart",
-				    "style" : {}
+				    "path" : "pages/login/login",
+				    "style" : {
+						"navigationBarTitleText": "授权"
+					}
 				},
 				{
-					"path" : "pages/transferApplication/transferApplication",
-					"style": {
-						"navigationBarTitleText": "调班申请"
+					"path" : "pages/identityAuth/identityAuth",
+					"style" : {
+						"navigationBarTitleText": "身份认证"
 					}
 				},
 				{
@@ -33,17 +35,25 @@
 					}
 				},
 				{
-					"path" : "pages/identityAuth/identityAuth",
-					"style" : {
-						"navigationBarTitleText": "身份认证"
+					"path" : "pages/answerSheet/answerSheet",
+					"style": {
+						"navigationBarTitleText": "答题卡"
 					}
+				},
+				
+				{
+				    "path" : "pages/examStart/examStart",
+				    "style" : {}
 				},
 				{
-					"path" : "pages/examPaper/examPaper",
-					"style" : {
-						"navigationBarTitleText": ""
+					"path" : "pages/transferApplication/transferApplication",
+					"style": {
+						"navigationBarTitleText": "调班申请"
 					}
 				},
+				
+				
+				
 				
 				{
 					"path" : "pages/personInfo/personInfo",
@@ -73,6 +83,7 @@
 						"navigationBarTitleText": "index"
 					}
 				}
+        
         
         
     ],

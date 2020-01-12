@@ -63,7 +63,15 @@
             "es6" : true,
             "minified" : true
         },
-        "usingComponents" : true
+        "usingComponents" : true,
+		"permission": {
+		    "scope.userInfo": {
+		      "desc": "你的个人信息的效果展示" // 高速公路行驶持续后台定位
+		    },
+			"scope.userLocation": {
+			  "desc": "你的位置信息的效果展示" // 高速公路行驶持续后台定位
+			}
+		}
     },
     "mp-alipay" : {
         "usingComponents" : true
