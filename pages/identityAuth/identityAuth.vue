@@ -3,53 +3,53 @@
 		<form @submit="formSubmit" @reset="formReset">
 			<cell class="identity-auth-cell" title="名字" :arrow="false">
 				<view slot="right-content">
-					<input class="name-input right-value" placeholder-class="placeholder" placeholder="请输入" />
+					<input class="name-input right-value" placeholder-class="placeholder" placeholder="请输入" :value="identityAuth.userName" />
 				</view>
 			</cell>
 			<cell class="identity-auth-cell" title="手机号" :arrow="false">
 				<view slot="right-content">
-					<input type="number" placeholder-class="placeholder" class="mobile-input right-value" placeholder="请输入" />
+					<input type="number" placeholder-class="placeholder" class="mobile-input right-value" placeholder="请输入" :value="identityAuth.mobilePhone" />
 				</view>
 			</cell>
 			<cell class="identity-auth-cell" title="岗位" >
 				<view slot="right-content">
-					<picker @change="bindPostPickerChange" mode="selector" :value="identityAuth.post" :range="formSelectList.postList">
-						<view class="right-value">{{formSelectList.postList[identityAuth.post]}}</view>
+					<picker @change="bindPostPickerChange" mode="selector" :value="identityAuth.station" :range="formSelectList.stationList">
+						<view class="right-value">{{formSelectList.stationList[identityAuth.station]}}</view>
 					</picker>
 				</view>
 			</cell>
 			<cell class="identity-auth-cell" title="所属分站" >
 				<view slot="right-content">
-					<picker @change="bindPostPickerChange" mode="selector" :value="identityAuth.post" :range="formSelectList.postList">
-						<view class="right-value">{{formSelectList.postList[identityAuth.post]}}</view>
+					<picker @change="bindPostPickerChange" mode="selector" :value="identityAuth.orgId" :range="formSelectList.orgList">
+						<view class="right-value">{{formSelectList.orgList[identityAuth.orgId] || "请选择所属分站"}}</view>
 					</picker>
 				</view>
 			</cell>
 			<cell class="identity-auth-cell" title="执业资格" >
 				<view slot="right-content">
 					<picker @change="bindPostPickerChange" mode="selector" :value="identityAuth.post" :range="formSelectList.postList">
-						<view class="right-value">{{formSelectList.postList[identityAuth.post]}}</view>
+						<view class="right-value">{{formSelectList.postList[identityAuth.post]  || "请选择执业资格"}}</view>
 					</picker>
 				</view>
 			</cell>
 			<cell class="identity-auth-cell" title="职称" >
 				<view slot="right-content">
-					<picker @change="bindPostPickerChange" mode="selector" :value="identityAuth.post" :range="formSelectList.postList">
-						<view class="right-value">{{formSelectList.postList[identityAuth.post]}}</view>
+					<picker @change="bindPostPickerChange" mode="selector" :value="identityAuth.title" :range="formSelectList.titleList">
+						<view class="right-value">{{formSelectList.titleList[identityAuth.title] || "请选择职称"}}</view>
 					</picker>
 				</view>
 			</cell>
 			<cell class="identity-auth-cell" title="调入急救中心时间" >
 				<view slot="right-content">
-					<picker @change="bindDatePickerChange" mode="date" :value="identityAuth.time" >
-						<view class="right-value">{{identityAuth.time}}</view>
+					<picker @change="bindDatePickerChange" mode="date" :value="identityAuth.logonTime" >
+						<view class="right-value">{{identityAuth.logonTime || "请选择调入急救中心时间"}}</view>
 					</picker>
 				</view>
 			</cell>
 			<cell class="identity-auth-cell" title="党员" >
 				<view slot="right-content">
 					<picker @change="bindTGPickerChange" mode="selector" :value="identityAuth.tg" :range="formSelectList.tgList">
-						<view class="right-value">{{formSelectList.tgList[identityAuth.tg]}}</view>
+						<view class="right-value">{{formSelectList.tgList[identityAuth.tg] || "请选择党员"}}</view>
 					</picker>
 				</view>
 			</cell>
@@ -60,6 +60,7 @@
 
 <script>
 	import cell from "@/components/Cell/CellItem.vue"
+	import api from '@/server/index';
 	export default {
 		components:{
 			cell
@@ -68,22 +69,28 @@
 			const currentDate = this.getDate()
 			return {
 				identityAuth:{
-					name:"",
-					mobile:"",
-					post: 0,
-					orgId: "",
-					orgName: "",
-					title: "",
-					titleName: "",
-					positionId: "",
-					positionName:"",
-					time: currentDate,
-					tg:1
+					
+					// userCode: "shenlu",
+					// "wechatNo": "",
+					// "wechatName": "",
+					/* "sex": "", */
+					userName:"",
+					mobilePhone:"",
+					orgId: "0",
+					station:"0",
+					title: "0",
+					tg:"0",
+					logonTime: currentDate,
+					
+					pictureUrl2:"",
+					introduce:""
 				},
 				formSelectList:{
-					postList:[
+					stationList:[
 						"医生"
 					],
+					titleList:["中级医生"],
+					orgList:[],
 					tgList:[
 						"是",
 						"否"
@@ -92,55 +99,25 @@
 			};
 		},
 		onLoad() {
-			uni.login({  
-				success: function(res) {  
-					// 获取code  
-					console.log(JSON.stringify(res));  
-				}  
-			});  
-			// const authorizeConfig = {
-			// 	scope:'scope.userInfo',
-			// 	success(){
-			// 		console.log(123)
-			// 		uni.getUserInfo({
-			// 		  provider: 'weixin',
-			// 		  success:  (infoRes) => {
-			// 			console.log(infoRes);
-			// 		  }
-			// 		})
-			// 	}
-			// }
-			// uni.authorize({
-			//     scope: 'scope.userInfo',
-			//     success() {
-			//         uni.getUserInfo({
-			//           provider: 'weixin',
-					  
-			// 		   withCredentials:true,    
-			//           success:  (infoRes) => {
-			//         	console.log(infoRes);
-			//           }
-			//         })
-			//     }
-			// })
-			// uni.getUserInfo({
-			//   provider: 'weixin',
-			//    withCredentials:true,    
-			//   success:  (infoRes) => {
-			// 	console.log(infoRes);
-			//   }
-			// })
-			// uni.getSystemInfo({
-			// 	success:(res)=>{
-			// 		console.log(res)
-			// 	}
-			// })
-			
-			
 		},
 		methods:{
-			formSubmit() {
-				alert('submit')
+			async formSubmit() {
+				const userInfo = {
+					...this.identityAuth
+				}
+				const res = await api.personInfo.userRegister(userInfo);
+				if(res.errorCode === 'success') {
+					// const config = {
+					// 	url:"../personIndex/personIndex",
+					// 	success:()=>{
+					// 		console.log('success',res);
+					// 	},
+					// 	fail:(err) => {
+					// 		console.log("fail",err)
+					// 	}
+					// }
+					// uni.navigateTo(config)
+				}
 			},
 			formReset() {
 				
@@ -176,10 +153,15 @@
 
 <style scoped lang="less">
 .identity-auth {
+	width:100%;
+	height:100vh;
+	background:rgb(247,249,250);
 	padding-top:32rpx;
 	background-color: #F7F9FA;
 	.identity-auth-cell{
 		.right-value {
+			display: block;
+			width:100%;
 			font-family: PingFangSC-Regular;
 			font-size: 32rpx;
 			text-align: right;
