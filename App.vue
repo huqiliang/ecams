@@ -2,25 +2,26 @@
 	import { userAuth, getOauth2OpenId } from "./server/modules/personInfo.js"
 	export default {
 		 onLaunch: async function() {
+			
 			uni.login({
 				success: async (res) => {  
 					const result = await getOauth2OpenId(res.code);
-					
 					const userAuthResult = await userAuth(result.openid);
 					if(userAuthResult && userAuthResult.errorCode==='success') {
 						if(userAuthResult.registered === "true") {
 							uni.setStorageSync('userInfo', userAuthResult.userInfo);
 						}else {
 							const config = {
-								url:"../identityAuth/identityAuth",
+								url:`../identityAuth/identityAuth?openid=${result.openid}`,
 								success:()=>{
-									console.log('success',result.openid)
+									console.log('success',result)
 								},
 								fail:(err) => {
 									console.log("fail",err)
 								}
 							}
-							uni.navigateTo(config)
+							uni.reLaunch(config)
+							
 						}
 					}
 					
@@ -38,6 +39,9 @@
 		},
 		onHide: function() {
 			console.log('App Hide')
+		},
+		methods:{
+			
 		}
 	}
 </script>

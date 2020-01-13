@@ -36,7 +36,7 @@
 						// 获取微信用户信息
 						wx.getUserInfo({
 						  success: function(res) {
-							  console.log(res)
+							console.log(res);
 							var userInfo = res.userInfo
 							var nickName = userInfo.nickName
 							var avatarUrl = userInfo.avatarUrl

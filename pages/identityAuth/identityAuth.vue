@@ -69,7 +69,6 @@
 			const currentDate = this.getDate()
 			return {
 				identityAuth:{
-					
 					userCode: "",
 					wechatNo: "",
 					wechatName: "",
@@ -203,8 +202,11 @@
 				}
 			};
 		},
-		async onLoad(openid) {
-			this.identityAuth.wechatNo = openid;
+		async onLoad(openidObj) {
+			
+			uni.hideHomeButton()
+			
+			this.identityAuth.wechatNo = openidObj.openid;
 			const formSelectList = await this.getFormSelectList();
 			const {stationList,qualificationList,titleList,orgList,partyMemberList} = formSelectList;
 			this.formSelectList = {
@@ -213,14 +215,28 @@
 		},
 		methods:{
 			async getFormSelectList() {
-					const res = await api.personInfo.userRegisterInit();
-					if(res.errorCode === 'success') {
-						return res;
-					}
+				const res = await api.personInfo.userRegisterInit();
+				if(res.errorCode === 'success') {
+					return res;
+				}
 			},
 			async formSubmit() {
+				const localStorageUserInfo = uni.getStorageSync("userInfo");
 				const userInfo = {
-					...this.identityAuth
+					userCode: "",
+					wechatNo: this.identityAuth.wechatNo,
+					wechatName: localStorageUserInfo.nickName,
+					sex: localStorageUserInfo.gender,
+					userName:this.identityAuth.userName,
+					mobilePhone:this.identityAuth.mobilePhone,
+					orgId: this.getCode(this.formSelectList.orgList,this.identityAuth.orgId),
+					station:this.getCode(this.formSelectList.stationList,this.identityAuth.station),
+					title: this.getCode(this.formSelectList.titleList,this.identityAuth.title),
+					qualification:this.getCode(this.formSelectList.qualificationList,this.identityAuth.qualification),
+					logonTime: this.identityAuth.logonTime,
+					partyMember:this.getCode(this.formSelectList.partyMemberList,this.identityAuth.partyMember),
+					pictureUrl2:"",
+					introduce:""
 				}
 				const res = await api.personInfo.userRegister(userInfo);
 				if(res.errorCode === 'success') {
@@ -238,6 +254,9 @@
 			},
 			formReset() {
 				
+			},
+			getCode(list,index) {
+				return list[index].id
 			},
 			bindStationPickerChange({detail:{value}}) {
 				this.identityAuth.station = value;

@@ -13,16 +13,19 @@
 			</view>
 			<view class="person-user-info uni-flex" :style="{'padding-top':nav_bar_wrapper_height}">
 				<view class="person-user-info-left  uni-flex">
-					<navigator url="../personInfo/personInfo" animationType='pop-in' animationDuration="200">
-						<view class="avart">
-							<image></image>
-						</view>
-					</navigator>
+					<!-- <navigator url="../personInfo/personInfo" animationType='pop-in' animationDuration="200"> -->
+						<button class='login-button' open-type="getUserInfo" @getuserinfo="getuserinfo" withCredentials="true">
+							<view class="avart">
+								<open-data type="userAvatarUrl"></open-data>
+							</view>
+						</button>
+					<!-- </navigator> -->
 					<view class="area">
 						<view class="name">
-							<text>{{userInfo.userName}}</text>
+							<open-data type="userNickName"></open-data>
 						</view>
 						<view>
+							<!-- <open-data type="userGender"></open-data> -->
 							<text class="station1">城南站 </text>
 							<text class="station2">金城分站 </text>
 							<text class="title-name">医生 </text>
@@ -114,7 +117,8 @@
 						name: "业务排名"
 					}
 				],
-				messageList: []
+				messageList: [],
+				userInfoData:{}
 			};
 		},
 		computed: {
@@ -135,12 +139,63 @@
 				return uni.getSystemInfoSync().statusBarHeight + 'px';
 			}
 		},
+		methods:{
+			getuserinfo: ()=>{
+				try {
+				    const userInfo = uni.getStorageSync("userInfo");
+					if(!userInfo) {
+						wx.login({
+							success (res) {
+								if (res.code) {
+								  //发起网络请求
+								  var code = res.code
+									// 获取微信用户信息
+									wx.getUserInfo({
+									  success: (res) => {
+										console.log(res);
+										this.userInfoData = res.userInfo;
+										uni.setStorageSync('userInfo', res.userInfo);
+										const config = {
+											url:"../personInfo/personInfo",
+											success:() => {
+												console.log('success',this.userInfoData)
+											},
+											fail:(err) => {
+												console.log("fail",err)
+											}
+										}
+										uni.navigateTo(config)
+									  },
+									  fail:res=>{
+										  // 获取失败的去引导用户授权 
+									   }
+									})
+								}
+							}
+						})
+					} else {
+						const config = {
+							url:"../personInfo/personInfo",
+							success:() => {
+								console.log('success',userInfo)
+							},
+							fail:(err) => {
+								console.log("fail",err)
+							}
+						}
+						uni.navigateTo(config)
+					}
+				} catch (e) {
+				    // error
+				}
+			}
+		},
 		async onShow() {
 			const res = await userWechatMessage(this.userInfo.userId);
 			let arr = []
 			_.map(res.messageList, val => {
 				val.groupTime = val.handleTime.split(' ')[0];
-				val.secondTiem = val.handleTime.split(' ')[1]
+				val.secondTiem = val.handleTime.split(' ')[1];
 			})
 			this.messageList = _.toArray(_.groupBy(res.messageList, "groupTime"))
 			console.log(this.messageList)
@@ -200,21 +255,32 @@
 				align-items: center;
 				//height: 292rpx;
 				padding: 40rpx 32rpx 132rpx;
-
-				.avart {
-
-					flex-basis: 16%;
+				.login-button{
+					width: 120rpx;
 					height: 120rpx;
+					padding:0;
+					border-radius: 50%;
+					background:transparent;
 					margin-right: 32rpx;
-
-					image {
+					&::after{
+						border:none;
+					}
+				
+					.avart {
+						flex-basis: 16%;
+						height: 120rpx;
+						
 						width: 120rpx;
 						height: 120rpx;
 						border-radius: 50%;
 						background-color: #FFFFFF;
+						overflow: hidden;
+
+						image {
+							
+						}
 					}
 				}
-
 				.area {
 					.name {
 						font-family: PingFangSC-Medium;
