@@ -1,29 +1,39 @@
 <template>
 	<!-- <cmd-cell-item title="排班表发布通知(11.25-11.29)" addon="附加文案" ></cmd-cell-item> -->
-	<cell :arrow="false">
-		<view class="" slot="left-content">
-			11.3心肺复苏成功，来自领导的表表表表表表表
-		</view>
-		<view class="notice-time" slot="right-content">
-			12:33
-		</view>
-	</cell>
+	<div >
+		<cell :arrow="false" v-for="(item,index) in noticeList">
+			<view class="" slot="left-content">
+				{{item.wechatContent}}
+			</view>
+			<view class="notice-time" slot="right-content">
+				{{item.handleTime.split(' ')[0]}}
+			</view>
+		</cell>
+	</div>
 </template>
 
 <script>
 	import cell from "@/components/Cell/CellItem.vue"
+	import api from "@/server/index"
 	export default {
 		components:{
 			cell
 		},
 		data() {
 			return {
-				
+				noticeList:[]
 			}
 		},
+		async onLoad() {
+			const noticeList = await this.getNotice();
+			this.noticeList = noticeList.messageList;
+		},
 		methods:{
-			showNotice() {
-				
+			async getNotice() {
+				const res = await api.notice.userWechatMessage();
+				if(res.errorCode === "success") {
+					return res;
+				}
 			}
 		}
 	}

@@ -17,5 +17,9 @@
 </script>
 
 <style lang="less">
-
+.progress-bar{
+	.progress-bar-container {
+		
+	}
+}
 </style>

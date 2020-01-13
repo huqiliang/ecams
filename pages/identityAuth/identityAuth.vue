@@ -13,43 +13,43 @@
 			</cell>
 			<cell class="identity-auth-cell" title="岗位" >
 				<view slot="right-content">
-					<picker @change="bindPostPickerChange" mode="selector" :value="identityAuth.station" :range="formSelectList.stationList">
-						<view class="right-value">{{formSelectList.stationList[identityAuth.station]}}</view>
+					<picker @change="bindStationPickerChange" mode="selector" :range-key="'text'" :value="identityAuth.station" :range="formSelectList.stationList">
+						<view class="right-value">{{formSelectList.stationList[identityAuth.station].text}}</view>
 					</picker>
 				</view>
 			</cell>
 			<cell class="identity-auth-cell" title="所属分站" >
 				<view slot="right-content">
-					<picker @change="bindPostPickerChange" mode="selector" :value="identityAuth.orgId" :range="formSelectList.orgList">
-						<view class="right-value">{{formSelectList.orgList[identityAuth.orgId] || "请选择所属分站"}}</view>
+					<picker @change="bindOrgPickerChange" mode="selector" :range-key="'text'" :value="identityAuth.orgId" :range="formSelectList.orgList">
+						<view class="right-value">{{formSelectList.orgList[identityAuth.orgId].text}}</view>
 					</picker>
 				</view>
 			</cell>
 			<cell class="identity-auth-cell" title="执业资格" >
 				<view slot="right-content">
-					<picker @change="bindPostPickerChange" mode="selector" :value="identityAuth.post" :range="formSelectList.postList">
-						<view class="right-value">{{formSelectList.postList[identityAuth.post]  || "请选择执业资格"}}</view>
+					<picker @change="bindQualificationPickerChange" mode="selector" :range-key="'text'" :value="identityAuth.qualification" :range="formSelectList.qualificationList">
+						<view class="right-value">{{formSelectList.qualificationList[identityAuth.qualification].text}}</view>
 					</picker>
 				</view>
 			</cell>
 			<cell class="identity-auth-cell" title="职称" >
 				<view slot="right-content">
-					<picker @change="bindPostPickerChange" mode="selector" :value="identityAuth.title" :range="formSelectList.titleList">
-						<view class="right-value">{{formSelectList.titleList[identityAuth.title] || "请选择职称"}}</view>
+					<picker @change="bindTitlePickerChange" mode="selector" :range-key="'text'" :value="identityAuth.title" :range="formSelectList.titleList">
+						<view class="right-value">{{formSelectList.titleList[identityAuth.title].text}}</view>
 					</picker>
 				</view>
 			</cell>
 			<cell class="identity-auth-cell" title="调入急救中心时间" >
 				<view slot="right-content">
 					<picker @change="bindDatePickerChange" mode="date" :value="identityAuth.logonTime" >
-						<view class="right-value">{{identityAuth.logonTime || "请选择调入急救中心时间"}}</view>
+						<view class="right-value">{{identityAuth.logonTime}}</view>
 					</picker>
 				</view>
 			</cell>
 			<cell class="identity-auth-cell" title="党员" >
 				<view slot="right-content">
-					<picker @change="bindTGPickerChange" mode="selector" :value="identityAuth.tg" :range="formSelectList.tgList">
-						<view class="right-value">{{formSelectList.tgList[identityAuth.tg] || "请选择党员"}}</view>
+					<picker @change="bindPartyMemberPickerChange" mode="selector" :range-key="'text'" :value="identityAuth.partyMember" :range="formSelectList.partyMemberList">
+						<view class="right-value">{{formSelectList.partyMemberList[identityAuth.partyMember].text}}</view>
 					</picker>
 				</view>
 			</cell>
@@ -70,67 +70,192 @@
 			return {
 				identityAuth:{
 					
-					// userCode: "shenlu",
-					// "wechatNo": "",
-					// "wechatName": "",
-					/* "sex": "", */
+					userCode: "",
+					wechatNo: "",
+					wechatName: "",
+					sex: "",
 					userName:"",
 					mobilePhone:"",
-					orgId: "0",
-					station:"0",
-					title: "0",
-					tg:"0",
+					orgId: 0,
+					station:0,
+					title: 0,
+					qualification:0,
 					logonTime: currentDate,
-					
+					partyMember:0,
 					pictureUrl2:"",
 					introduce:""
 				},
 				formSelectList:{
-					stationList:[
-						"医生"
-					],
-					titleList:["中级医生"],
-					orgList:[],
-					tgList:[
-						"是",
-						"否"
-					]
+					stationList: [
+					    {
+					      "id": "1",
+					      "text": "主任"
+					    },
+					    {
+					      "id": "2",
+					      "text": "副主任"
+					    },
+					    {
+					      "id": "3",
+					      "text": "科室负责人"
+					    },
+					    {
+					      "id": "4",
+					      "text": "分站长"
+					    },
+					    {
+					      "id": "5",
+					      "text": "调度员"
+					    },
+					    {
+					      "id": "6",
+					      "text": "医生"
+					    },
+					    {
+					      "id": "7",
+					      "text": "护士"
+					    },
+					    {
+					      "id": "8",
+					      "text": "驾驶员"
+					    },
+					    {
+					      "id": "9",
+					      "text": "担架员"
+					    }
+					  ],
+					qualificationList: [
+					    {
+					      "id": "0",
+					      "text": "否"
+					    },
+					    {
+					      "id": "1",
+					      "text": "是"
+					    }
+					  ],
+					titleList: [
+					    {
+					      "id": "1",
+					      "text": "主任医师"
+					    },
+					    {
+					      "id": "2",
+					      "text": "副主任医师"
+					    },
+					    {
+					      "id": "3",
+					      "text": "主治医师"
+					    },
+					    {
+					      "id": "4",
+					      "text": "医师"
+					    },
+					    {
+					      "id": "5",
+					      "text": "医士"
+					    },
+					    {
+					      "id": "6",
+					      "text": "主任护师"
+					    },
+					    {
+					      "id": "7",
+					      "text": "副主任护师"
+					    },
+					    {
+					      "id": "8",
+					      "text": "主管护师"
+					    },
+					    {
+					      "id": "9",
+					      "text": "护师"
+					    },
+					    {
+					      "id": "10",
+					      "text": "护士"
+					    }
+					  ],
+					orgList: [
+					    {
+					      "id": "1",
+					      "text": "金城分站"
+					    },
+					    {
+					      "id": "2",
+					      "text": "中桥分站"
+					    },
+					    {
+					      "id": "3",
+					      "text": "虹桥分站"
+					    }
+					  ],
+					partyMemberList: [
+					    {
+					      "id": "0",
+					      "text": "否"
+					    },
+					    {
+					      "id": "1",
+					      "text": "是"
+					    }
+					  ],
 				}
 			};
 		},
-		onLoad() {
+		async onLoad(openid) {
+			this.identityAuth.wechatNo = openid;
+			const formSelectList = await this.getFormSelectList();
+			const {stationList,qualificationList,titleList,orgList,partyMemberList} = formSelectList;
+			this.formSelectList = {
+				stationList,qualificationList,titleList,orgList,partyMemberList
+			}
 		},
 		methods:{
+			async getFormSelectList() {
+					const res = await api.personInfo.userRegisterInit();
+					if(res.errorCode === 'success') {
+						return res;
+					}
+			},
 			async formSubmit() {
 				const userInfo = {
 					...this.identityAuth
 				}
 				const res = await api.personInfo.userRegister(userInfo);
 				if(res.errorCode === 'success') {
-					// const config = {
-					// 	url:"../personIndex/personIndex",
-					// 	success:()=>{
-					// 		console.log('success',res);
-					// 	},
-					// 	fail:(err) => {
-					// 		console.log("fail",err)
-					// 	}
-					// }
-					// uni.navigateTo(config)
+					const config = {
+						url:"../personIndex/personIndex",
+						success:()=>{
+							console.log('success',res);
+						},
+						fail:(err) => {
+							console.log("fail",err)
+						}
+					}
+					uni.navigateTo(config)
 				}
 			},
 			formReset() {
 				
 			},
+			bindStationPickerChange({detail:{value}}) {
+				this.identityAuth.station = value;
+			},
+			bindOrgPickerChange({detail:{value}}) {
+				this.identityAuth.orgId = value;
+			},
+			bindQualificationPickerChange({detail:{value}}) {
+				this.identityAuth.qualification = value;
+			},
+			bindTitlePickerChange({detail:{value}}) {
+				this.identityAuth.title = value;
+			},
+			bindPartyMemberPickerChange({detail:{value}}) {
+				this.identityAuth.partyMember = value;
+			},
 			bindDatePickerChange({detail: {value}}) {
 				this.identityAuth.time = value;
-			},
-			bindTGPickerChange({ detail: { value } }) {
-				
-				this.identityAuth.tg = value;
-			},
-			bindPostPickerChange() {
-			
 			},
 			getDate(type) {
 				const date = new Date();

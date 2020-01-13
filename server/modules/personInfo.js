@@ -34,9 +34,14 @@ export const userWechatMessage = (userId) => {
 		userId,
 	})
 }
+// userRegisterInit
+export const userRegisterInit = (data) => {
+	return request(`${baseURL}/Business/serviceInterface/userRegisterInit.json`,{})
+}
 export default {
 	userHomePageInfo,
 	userAuth,
 	getOauth2OpenId,
-	userRegister
+	userRegister,
+	userRegisterInit
 }
