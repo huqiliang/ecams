@@ -47,7 +47,7 @@
 			const data = await api.examLearn.getExamInfo(option.examId);
 			if (data.errorCode === ERR_OK) {
 				console.log(data)
-				this.examInfo = data;
+				this.examInfo = data.examInfo;
 				this.setTitle(this.examInfo.examName)
 			}
 		},
