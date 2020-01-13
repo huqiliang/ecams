@@ -8,9 +8,8 @@ export const startExam = (userId,examId) => {
 	}
 	return request(`${baseURL}/Business/serviceInterface/startExam.json`,data)
 }
-export const getExamDetail = (userId,examId) => {
+export const getExamDetail = (examId) => {
 	const data = {
-		userId,
 		examId
 	}
 	return request(`${baseURL}/Business/serviceInterface/getExamDetail`,data)

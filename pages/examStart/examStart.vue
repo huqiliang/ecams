@@ -7,7 +7,7 @@
 		</cell>
 		<cell class="exam-start-cell" title="考试总分" :arrow="false">
 			<view class="exam-start-cell-right-content" slot="right-content">
-				<text>100分</text>
+				<text>{{examInfo.totalScore}}分</text>
 			</view>
 		</cell>
 		<cell class="exam-start-cell" title="及格分数" :arrow="false">
@@ -17,12 +17,12 @@
 		</cell>
 		<cell class="exam-start-cell" title="题目数量" :arrow="false">
 			<view class="exam-start-cell-right-content" slot="right-content">
-				<text>100题</text>
+				<text>{{examInfo.questionNum}}题</text>
 			</view>
 		</cell>
 
 
-		<button @click="startExam(userId,examInfo.examId)" class="exam-start-button">开始考试</button>
+		<button @click="startExam(examInfo.examId)" class="exam-start-button">开始考试</button>
 
 	</view>
 </template>
@@ -40,7 +40,7 @@
 		data() {
 			return {
 				examInfo: {},
-				userId: ""
+				userId: uni.getStorageSync("userInfo").userId
 			};
 		},
 		async onLoad(option) {
@@ -58,7 +58,7 @@
 				})
 			},
 			async getExamDetail(userId, examId) {
-				const res = await api.examStart.getExamDetail(userId, examId);
+				const res = await api.examStart.getExamDetail(examId);
 				if (res.errorCode === ERR_OK) {
 					const config = {
 						url: ``,
@@ -72,10 +72,10 @@
 					uni.navigateTo(config)
 				}
 			},
-			async startExam(userId, examId) {
-				const res = await api.examStart.startExam(userId, examId)
-				if (res.errorCode === ERR_OK) {
-					await this.getExamDetail(userId, examId)
+			async startExam(examId) {
+				const res = await api.examStart.startExam(this.userId, examId)
+				if (res.errorCode === 'success') {
+					uni.navigateTo({url:`../examPaper/examPaper?examId=${item.examId}`})
 				}
 			}
 		}
