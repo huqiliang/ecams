@@ -1,35 +1,20 @@
 <template>
 	<view style="background-color: #F7F9FA;">
 		<view class="QS-tabs-box">
-			<QSTabs 
-			ref="tabs" 
-			:tabs="qsTabs.tabs" 
-			animationMode="line1" 
-			animationLineWidth="64"
-			:current="qsTabs.current" 
-			@change="tabsChange"
-			activeColor="#36C892" 
-			lineColor="#36C892"
-			fontSize="32"
-			:min-width="375"
-			:height="88"
-			:duration="0.5"
-			>
+			<QSTabs ref="tabs" :tabs="qsTabs.tabs" animationMode="line1" animationLineWidth="64" :current="qsTabs.current"
+			 @change="tabsChange" activeColor="#36C892" lineColor="#36C892" fontSize="32" :min-width="375" :height="88"
+			 :duration="0.5">
 			</QSTabs>
 		</view>
-		<swiper 
-			:style="{'height': swiper.height,}" 
-			:current="swiper.current" 
-			@change="swiperChange"
-			@transition="transition"
-			@animationfinish="animationfinish">
+		<swiper :style="{'height': swiper.height,}" :current="swiper.current" @change="swiperChange" @transition="transition"
+		 @animationfinish="animationfinish">
 			<swiper-item class="swiper-item">
-				<scroll-view scroll-y style="height: 100%;width: 100%;background-color: #F7F9FA;margin-top:-16rpx;" >
-					<view class="scroll-items" >
+				<scroll-view scroll-y style="height: 100%;width: 100%;background-color: #F7F9FA;margin-top:-16rpx;">
+					<view class="scroll-items">
 						<view class="scroll-item-text-box">
-							 <view class="uni-flex uni-row" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;justify-content:space-between;">
-								 
-								<view class="flex-item" style="margin-bottom:32rpx;" v-for="(item,index) in examList" :key="item.tpId">
+							<view class="uni-flex uni-row" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;justify-content:space-between;">
+
+								<view class="flex-item" style="margin-bottom:32rpx;" v-for="item in examList" :key="item.examId">
 									<Card>
 										<view class="ornament"></view>
 										<view class="card-title">
@@ -39,20 +24,20 @@
 											<text>{{item.durationStart}}</text>
 										</view>
 										<view class="card-mark">
-											<text >{{item.passingMark}}</text>
+											<text>{{item.passingMark}}</text>
 										</view>
-										<button @click="getExamInfo(item.examId)" class="card-button card-button-view" >查看</button>
+										<button @click="getExamInfo(item)" class="card-button card-button-view">{{item.userExamState=='1'?"开始考试":item.userExamState=='2'?"继续考试":"查看"}}</button>
 									</Card>
 								</view>
-								
-							 </view>
-							 
+
+							</view>
+
 						</view>
 					</view>
 				</scroll-view>
 			</swiper-item>
 			<swiper-item class="swiper-item">
-				<scroll-view scroll-y style="height: 100%;width: 100%;box-sizing: border-box;" >
+				<scroll-view scroll-y style="height: 100%;width: 100%;box-sizing: border-box;">
 					<cell class="" title="学习课件" content="查看全部" :border="false"></cell>
 					<view class="scroll-items" style="background-color: #FFFFFF;margin-bottom:80rpx;">
 						<view class="scroll-item-text-box">
@@ -83,8 +68,8 @@
 									</view>
 								</view>
 							</view>
-							
-							
+
+
 						</view>
 					</view>
 				</scroll-view>
@@ -97,12 +82,17 @@
 	import Card from '@/components/Card.vue'
 	import QSTabs from '@/components/QS-tabs/QS-tabs.vue';
 	import api from "../../server/index.js"
-	import {ERR_OK} from "@/utils/config.js"
+	import {
+		ERR_OK
+	} from "@/utils/config.js"
 	import cell from "@/components/Cell/CellItem"
-	import {uniList,uniListItem } from '@dcloudio/uni-ui'
+	import {
+		uniList,
+		uniListItem
+	} from '@dcloudio/uni-ui'
 	const Sys = uni.getSystemInfoSync();
 	const wH = Sys.windowHeight;
-	
+
 	const swiperHeight = `${(wH - 44-8)*2}rpx`;
 	export default {
 		components: {
@@ -114,43 +104,69 @@
 		},
 		data() {
 			return {
-				qsTabs:{
-					tabs:["我的考试","知识库"],
+				qsTabs: {
+					tabs: ["我的考试", "知识库"],
 					current: 0,
 				},
-				swiper:{
-					current: 0 ,
-					height:swiperHeight
+				swiper: {
+					current: 0,
+					height: swiperHeight
 				},
-				examList:[],
-				userId:"1"
+				examList: [],
+				userId: "1"
 			}
 		},
 		onLoad() {
 			this.getMyExam(this.userId);
 		},
 		methods: {
-			async getExamInfo(examId) {
-				const data = await api.examLearn.getExamInfo(examId);
-				if(data.errorCode === ERR_OK) {
-					
-					const config = {
-						url:`../examStart/examStart?examInfo=${encodeURIComponent(JSON.stringify(data.examInfo))}&userId=${this.userId}`,
-						success:()=>{
-							console.log('success',arguments)
-						},
-						fail:(err) => {
-							console.log("fail",err)
+			async getExamInfo(item) {
+
+				let config;
+				switch (item.userExamState) {
+					case "1":
+						config = {
+							url: `../examStart/examStart?examId=${item.examId}`,
+							success: () => {
+								console.log('success', arguments)
+							},
+							fail: (err) => {
+								console.log("fail", err)
+							}
 						}
-					}
-					uni.navigateTo(config)
+						break;
+					case "2":
+						config = {
+							url: `../examPaper/examPaper?examId=${item.examId}`,
+							success: () => {
+								console.log('success', arguments)
+							},
+							fail: (err) => {
+								console.log("fail", err)
+							}
+						}
+						break;
+					case "3":
+						config = {
+							url: `../answerSheet/answerSheet?examId=${item.examId}`,
+							success: () => {
+								console.log('success', arguments)
+							},
+							fail: (err) => {
+								console.log("fail", err)
+							}
+						}
+						break;
+					default:
+						break;
 				}
+				uni.navigateTo(config)
 			},
 			async getMyExam(userId) {
-				
+
 				const data = await api.examLearn.getMyExam(userId);
 				console.log(data)
-				if(data.errorCode === ERR_OK) {
+				if (data.errorCode === ERR_OK) {
 					this.examList = data.examList;
 				}
 			},
@@ -158,14 +174,27 @@
 				this.qsTabs.current = index;
 				this.swiper.current = index;
 			},
-			swiperChange({detail:{current,source}}) {
+			swiperChange({
+				detail: {
+					current,
+					source
+				}
+			}) {
 				this.qsTabs.current = current;
 				this.swiper.current = current;
 			},
-			transition({ detail: { dx } }) {
+			transition({
+				detail: {
+					dx
+				}
+			}) {
 				this.$refs.tabs.setDx(dx);
 			},
-			animationfinish({detail: { current }}) {
+			animationfinish({
+				detail: {
+					current
+				}
+			}) {
 				this.$refs.tabs.setFinishCurrent(current);
 			}
 		}
@@ -174,17 +203,20 @@
 
 <style scoped lang="less">
 	@import '../../common/mixins.less';
+
 	.QS-tabs-box {
 		width: 100%;
 		position: sticky;
 		top: 0;
 		z-index: 10;
 		background-color: white;
-		margin-bottom:16rpx
+		margin-bottom: 16rpx
 	}
-	.swiper-item{
+
+	.swiper-item {
 		background-color: #fff;
 	}
+
 	.scroll-items {
 		display: flex;
 		flex-direction: column;
@@ -192,6 +224,7 @@
 		padding: 32rpx;
 		box-sizing: border-box;
 	}
+
 	.scroll-item {
 		margin-top: 15rpx;
 		padding: 25rpx;
@@ -202,9 +235,11 @@
 		flex-direction: row;
 		border: 1px solid #f8f8f8;
 	}
+
 	.scroll-item-image-box {
 		flex-grow: 0;
 	}
+
 	.scroll-item-text-box {
 		flex-grow: 1;
 		display: flex;
@@ -212,14 +247,16 @@
 		justify-content: space-between;
 		font-size: 28rpx;
 		font-weight: bold;
-		
+
 	}
+
 	.scroll-item-image {
 		border-radius: 4rpx;
 		width: 180rpx;
 		height: 150rpx;
 	}
-	.ornament{
+
+	.ornament {
 		height: 64rpx;
 		background-color: #35DC9E;
 		border-top-left-radius: 16rpx;
@@ -227,15 +264,16 @@
 		border-bottom-left-radius: 32rpx;
 		border-bottom-right-radius: 32rpx;
 	}
-	.card-title{
+
+	.card-title {
 		margin: 32rpx 0 4rpx;
 		text-align: center;
 	}
-	
+
 	.card-title {
-		text{
+		text {
 			width: 85%;
-			display:block;
+			display: block;
 			/* box-sizing: border-box;
 			padding:10rpx; */
 			font-family: PingFangSC-Semibold;
@@ -244,11 +282,13 @@
 			.no-wrap();
 		}
 	}
+
 	.card-time {
-		margin:4rpx 0 6rpx ;
+		margin: 4rpx 0 6rpx;
 		text-align: center;
 	}
-	.card-time text{
+
+	.card-time text {
 		opacity: 0.8;
 		font-family: PingFangSC-Regular;
 		font-size: 24rpx;
@@ -256,97 +296,113 @@
 		text-align: center;
 		line-height: 36rpx;
 	}
+
 	.card-mark {
 		text-align: center;
-		height:76rpx;
+		height: 76rpx;
 		line-height: 76rpx;
-		margin:12rpx auto 20rpx;
+		margin: 12rpx auto 20rpx;
 	}
+
 	.card-mark text {
 		font-family: DINCond-Black;
 		font-size: 64rpx;
 		color: #FFFFFF;
 		text-align: center;
 	}
+
 	.konwleage-base-left {
 		width: 160rpx;
 		height: 160rpx;
-		margin-right:16rpx;
-		background:#fff;
+		margin-right: 16rpx;
+		background: #fff;
 	}
-	.konwleage-base-left-image{
+
+	.konwleage-base-left-image {
 		width: 160rpx;
 		height: 160rpx;
 		background: #EFF1F2;
 	}
+
 	.konwleage-base-right {
-		width:100%;
+		width: 100%;
 	}
-	.konwleage-base-right-title{
+
+	.konwleage-base-right-title {
 		font-size: 0;
-		margin-bottom:16rpx;
+		margin-bottom: 16rpx;
 		height: 44rpx;
 		line-height: 44rpx;
 	}
-	.konwleage-base-right-title-text {		
+
+	.konwleage-base-right-title-text {
 		font-family: PingFangSC-Regular;
 		font-size: 32rpx;
-		
+
 		color: #333333;
 		letter-spacing: 0;
-		
+
 	}
+
 	.konwleage-base-right-time {
-		font-size:0;
+		font-size: 0;
 		margin-bottom: 30rpx;
 		height: 34rpx;
 		line-height: 34rpx;
 	}
+
 	.konwleage-base-right-time-text {
 		font-family: PingFangSC-Regular;
 		font-size: 24rpx;
 		color: #999999;
 		letter-spacing: 0;
-		
+
 	}
+
 	.konwleage-base-right-features {
-		width:100%;
+		width: 100%;
 		justify-content: flex-end;
 		height: 24rpx;
 		line-height: 24rpx;
 		// text-align: right;
 	}
-	.konwleage-base-right-features-image{
-		width:24rpx;
-		height:24rpx;
+
+	.konwleage-base-right-features-image {
+		width: 24rpx;
+		height: 24rpx;
 	}
+
 	.konwleage-base-right-features-read {
-		margin-right:24rpx;
+		margin-right: 24rpx;
 	}
-	.konwleage-base-right-features-like{
-		margin-right:24rpx;
+
+	.konwleage-base-right-features-like {
+		margin-right: 24rpx;
 	}
-	.konwleage-base-right-features-icon  {
+
+	.konwleage-base-right-features-icon {
 		text {
 			font-family: PingFangSC-Regular;
 			font-size: 24rpx;
 			color: #999999;
 			letter-spacing: 0;
-			
-			
+
+
 		}
 	}
-	.card-button{
+
+	.card-button {
 		width: 224rpx;
 		line-height: 60rpx;
 		height: 64rpx;
-		border-radius:32rpx;
+		border-radius: 32rpx;
 		background-color: transparent;
-		border:2px solid #ffffff;
+		border: 2px solid #ffffff;
 	}
+
 	.card-button-view {
 		font-family: PingFangSC-Regular;
-		font-size:32rpx;
+		font-size: 32rpx;
 		color: #FFFFFF;
 		text-align: center;
 	}
