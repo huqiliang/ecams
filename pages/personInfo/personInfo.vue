@@ -137,6 +137,23 @@
 					pictureUrl2:"",
 					introduce:""
 				},
+				personInfoSubmitForm:{
+					userCode: "",
+					wechatNo: "",
+					wechatName: "",
+					sex: "",
+					userName:"",
+					mobilePhone:"",
+					orgId: 0,
+					station:0,
+					title: 0,
+					qualification:0,
+					birthday: currentDate,
+					logonTime: currentDate,
+					partyMember:0,
+					pictureUrl2:"",
+					introduce:""
+				},
 				formSelectList:{
 					stationList:[],
 					qualificationList:[],
@@ -169,21 +186,32 @@
 		},
 		async onLoad() {
 			const userInfo = uni.getStorageSync('userInfo');
-			this.personInfo = userInfo;
-			this.personInfo.logonTime = userInfo.logonTime.split(" ")[0];
-			
+			this.personInfoSubmitForm = userInfo;
 			const formSelectList = await this.getFormSelectList();
 			const {stationList,qualificationList,titleList,orgList,partyMemberList} = formSelectList;
 			this.formSelectList = {
 				stationList,qualificationList,titleList,orgIdList:orgList,partyMemberList
 			}
+			const arr = ['orgId','station','qualification','title','partyMember']
+			arr.forEach(key=>{
+				this.personInfo[key] =  this.getIndex(this.formSelectList[`${key}List`],userInfo[key]);
+			})
+			
+			
+			this.personInfo.logonTime = userInfo.logonTime.split(" ")[0];
+			
 		},
 		methods:{
-			
-			getCode(list,id) {
-				return list.find(item=>{
+			getIndex(list,id) {
+				const findIndex = list.findIndex(item=>{
 					return item.id === id
-				}).id;
+				})
+				if(findIndex>-1) {
+					return findIndex;
+				}
+			},
+			getCode(list,index) {
+				return list[index].id
 			},
 			async updateUserInfo() {
 				const userInfo = {
