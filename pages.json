@@ -1,5 +1,6 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+				
 				{
 					"path" : "pages/personIndex/personIndex",
 					"style" : {
@@ -9,6 +10,12 @@
 						"navigationStyle":"custom"
 						
 					}
+				},
+				{
+				    "path" : "pages/examStart/examStart",
+				    "style" : {
+							"navigationBarTitleText": "开始考试"
+						}
 				},
 				{
 					"path" : "pages/answerSheet/answerSheet",
@@ -22,10 +29,7 @@
 						"navigationBarTitleText": "考试学习"
 					}
 				},
-				{
-				    "path" : "pages/examStart/examStart",
-				    "style" : {}
-				},
+				
 				{
 					"path" : "pages/transferApplication/transferApplication",
 					"style": {

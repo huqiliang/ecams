@@ -26,9 +26,9 @@
 						</view>
 						<view>
 							<!-- <open-data type="userGender"></open-data> -->
-							<text class="station1">城南站 </text>
-							<text class="station2">金城分站 </text>
-							<text class="title-name">医生 </text>
+							<text class="station1"> </text>
+							<text class="station2">{{userInfo.orgName}} </text>
+							<text class="title-name">{{userInfo.stationName}}</text>
 						</view>
 					</view>
 				</view>
@@ -123,6 +123,7 @@
 		},
 		computed: {
 			userInfo() {
+				
 				return uni.getStorageSync('userInfo')
 			},
 			nav_bar_wrapper_height() {
@@ -141,9 +142,9 @@
 		},
 		methods:{
 			getuserinfo: ()=>{
-				try {
-				    const userInfo = uni.getStorageSync("userInfo");
-					if(!userInfo) {
+				//try {
+				 //  const userInfo = uni.getStorageSync("userInfo");
+					// if(!userInfo) {
 						wx.login({
 							success (res) {
 								if (res.code) {
@@ -153,12 +154,13 @@
 									wx.getUserInfo({
 									  success: (res) => {
 										console.log(res);
-										this.userInfoData = res.userInfo;
-										uni.setStorageSync('userInfo', res.userInfo);
+										const userInfo = uni.getStorageSync('userInfo');
+										const newUserInfo = Object.assign({},userInfo,res.userInfo)
+										uni.setStorageSync('userInfo', newUserInfo);
 										const config = {
 											url:"../personInfo/personInfo",
 											success:() => {
-												console.log('success',this.userInfoData)
+												console.log('success')
 											},
 											fail:(err) => {
 												console.log("fail",err)
@@ -167,27 +169,37 @@
 										uni.navigateTo(config)
 									  },
 									  fail:res=>{
-										  // 获取失败的去引导用户授权 
+											console.log(res,'fail')
+										  const config = {
+										  	url:"../personInfo/personInfo",
+										  	success:() => {
+										  		console.log('success',this.userInfoData)
+										  	},
+										  	fail:(err) => {
+										  		console.log("fail",err)
+										  	}
+										  }
+										  uni.navigateTo(config)
 									   }
 									})
 								}
 							}
 						})
-					} else {
-						const config = {
-							url:"../personInfo/personInfo",
-							success:() => {
-								console.log('success',userInfo)
-							},
-							fail:(err) => {
-								console.log("fail",err)
-							}
-						}
-						uni.navigateTo(config)
-					}
-				} catch (e) {
-				    // error
-				}
+				// 	} else {
+				// 		const config = {
+				// 			url:"../personInfo/personInfo",
+				// 			success:() => {
+				// 				console.log('success',userInfo)
+				// 			},
+				// 			fail:(err) => {
+				// 				console.log("fail",err)
+				// 			}
+				// 		}
+				// 		uni.navigateTo(config)
+				// 	}
+				// } catch (e) {
+				//     // error
+				// }
 			}
 		},
 		async onShow() {
@@ -294,10 +306,11 @@
 					.station2,
 					.title-name {
 						font-family: PingFangSC-Regular;
-						font-size: 14px;
+						font-size: 28rpx;
 						color: #FFFFFF;
 						letter-spacing: 0.23px;
 						text-align: left;
+						margin-right:12rpx;
 					}
 				}
 

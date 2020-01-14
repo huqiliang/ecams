@@ -75,7 +75,7 @@
 			async startExam(examId) {
 				const res = await api.examStart.startExam(this.userId, examId)
 				if (res.errorCode === 'success') {
-					uni.navigateTo({url:`../examPaper/examPaper?examId=${item.examId}`})
+					uni.navigateTo({url:`../examPaper/examPaper?examId=${examId}`})
 				}
 			}
 		}

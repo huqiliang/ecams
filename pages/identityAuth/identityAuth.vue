@@ -202,10 +202,11 @@
 				}
 			};
 		},
-		async onLoad(openidObj) {
-			
+		onShow: function() {
 			uni.hideHomeButton()
-			
+			console.log('App Show')
+		},
+		async onLoad(openidObj) {
 			this.identityAuth.wechatNo = openidObj.openid;
 			const formSelectList = await this.getFormSelectList();
 			const {stationList,qualificationList,titleList,orgList,partyMemberList} = formSelectList;
@@ -225,8 +226,8 @@
 				const userInfo = {
 					userCode: "",
 					wechatNo: this.identityAuth.wechatNo,
-					wechatName: localStorageUserInfo.nickName,
-					sex: localStorageUserInfo.gender,
+					wechatName: "",
+					sex: "",
 					userName:this.identityAuth.userName,
 					mobilePhone:this.identityAuth.mobilePhone,
 					orgId: this.getCode(this.formSelectList.orgList,this.identityAuth.orgId),
@@ -289,7 +290,7 @@
 				}
 				month = month > 9 ? month : '0' + month;;
 				day = day > 9 ? day : '0' + day;
-				return `${year}年${month}月${day}日`;
+				return `${year}-${month}-${day}`;
 			}
 		}
 	}
