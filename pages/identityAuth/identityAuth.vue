@@ -167,14 +167,6 @@
 			formReset() {
 				
 			},
-			getIndex(list,id) {
-				const findIndex = list.findIndex(item=>{
-					return item.id === id
-				})
-				if(findIndex>-1) {
-					return findIndex;
-				}
-			},
 			getCode(list,index) {
 				return list[index].id
 			},

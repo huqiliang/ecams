@@ -3,7 +3,7 @@
 		<view class="personInfo-cell-container">
 			<!-- <cell title="人脸数据"  content="尚未验证"></cell> -->
 			
-			<cell class="personInfo-cell" title="姓名" :arrow="false">
+			<!-- <cell class="personInfo-cell" title="姓名" :arrow="false">
 				<view slot="right-content">
 					<input 	@blur="({detail:{value}})=>{
 										this.changeInput(value,'userName')
@@ -30,9 +30,11 @@
 						<view class="right-value">{{personInfo.birthday}}</view>
 					</picker>
 				</view>
-			</cell>
-			<!-- <cell title="联系电话"  :content="personInfo.mobilePhone" :arrow="false"></cell> -->
-			<cell class="personInfo-cell" title="身份证号" :arrow="false">
+			</cell> -->
+			<cell title="姓名"  :content="personInfo.userName" :arrow="false"></cell>
+			<cell title="生日"  :content="personInfo.birthday" :arrow="false"></cell>
+			<cell title="联系电话"  :content="personInfo.mobilePhone" :arrow="false"></cell>
+			<!-- <cell class="personInfo-cell" title="身份证号" :arrow="false">
 				<view slot="right-content">
 					<input class="name-input right-value" @blur="({detail:{value}})=>{
 										this.changeInput(value,'cardId')
@@ -40,17 +42,17 @@
 										this.changeInput(value,'cardId')
 								  }" placeholder-class="placeholder" placeholder="请输入" :value="personInfo.cardId" />
 				</view>
-			</cell>
-			<!-- <cell title="身份证号"  content="" :arrow="false"></cell> -->
+			</cell> -->
+			<cell title="身份证号"  :content="personInfo.cardId" :arrow="false"></cell>
 		</view>
 		<view class="personInfo-cell-container">
-			<!-- <cell class="cell-item" title="所属分站"  :content="formSelectList.orgList[personInfo.orgId].text" ></cell>
-			<cell class="cell-item" title="岗位"  :content="formSelectList.stationList[personInfo.station].text" ></cell>
-			<cell class="cell-item" title="执业资格"  :content="formSelectList.qualificationList[personInfo.qualification].text" ></cell>
-			<cell class="cell-item" title="职称"  :content="formSelectList.titleList[personInfo.title].text" ></cell>
+			<cell class="cell-item" title="所属分站"  :content="formSelectList.orgIdList[getIndex(formSelectList.orgIdList,personInfo.orgId)].text" ></cell>
+			<cell class="cell-item" title="岗位"  :content="formSelectList.stationList[getIndex(formSelectList.stationList,personInfo.station)].text" ></cell>
+			<cell class="cell-item" title="执业资格"  :content="formSelectList.qualificationList[getIndex(formSelectList.qualificationList,personInfo.qualification)].text" ></cell>
+			<cell class="cell-item" title="职称"  :content="formSelectList.titleList[getIndex(formSelectList.titleList,personInfo.title)].text" ></cell>
 			<cell class="cell-item" title="调入年月"  :content="personInfo.logonTime" ></cell>
-			<cell class="cell-item" title="党员"  :content="formSelectList.partyMemberList[personInfo.partyMember].text" ></cell> -->
-			<cell class="personInfo-cell" title="所属分站" >
+			<cell class="cell-item" title="党员"  :content="formSelectList.partyMemberList[getIndex(formSelectList.partyMemberList,personInfo.partyMember)].text" ></cell>
+			<!-- <cell class="personInfo-cell" title="所属分站" >
 				<view slot="right-content">
 					<picker @change="({detail:{value}})=>{
 										this.changePicker(value,'orgId')
@@ -101,10 +103,10 @@
 					<picker @change="({detail:{value}})=>{
 										this.changePicker(value,'partyMember')
 								  }" mode="selector" :range-key="'text'" :value="personInfo.partyMember" :range="formSelectList.partyMemberList">
-						<view class="right-value">{{selectFormText('partyMemberList',personInfo.partyMember)}}</view>
+						<view class="right-value">{{formSelectList.partyMemberList[personInfo.partyMember].text }}</view>
 					</picker>
 				</view>
-			</cell>
+			</cell> -->
 		</view>
 		<button class="login-out">退出登录</button>
 	</view>
@@ -127,9 +129,9 @@
 					sex: "",
 					userName:"",
 					mobilePhone:"",
-					orgId: 0,
-					station:0,
-					title: 0,
+					orgId: '3',
+					station:'2',
+					title: '1',
 					qualification:0,
 					birthday: currentDate,
 					logonTime: currentDate,
@@ -137,65 +139,171 @@
 					pictureUrl2:"",
 					introduce:""
 				},
-				personInfoSubmitForm:{
-					userCode: "",
-					wechatNo: "",
-					wechatName: "",
-					sex: "",
-					userName:"",
-					mobilePhone:"",
-					orgId: 0,
-					station:0,
-					title: 0,
-					qualification:0,
-					birthday: currentDate,
-					logonTime: currentDate,
-					partyMember:0,
-					pictureUrl2:"",
-					introduce:""
-				},
+				// personInfoSubmitForm:{
+				// 	userCode: "",
+				// 	wechatNo: "",
+				// 	wechatName: "",
+				// 	sex: "",
+				// 	userName:"",
+				// 	mobilePhone:"",
+				// 	orgId: "1",
+				// 	station:"0",
+				// 	title: '0',
+				// 	qualification:'0',
+				// 	birthday: currentDate,
+				// 	logonTime: currentDate,
+				// 	partyMember:'0',
+				// 	pictureUrl2:"",
+				// 	introduce:""
+				// },
 				formSelectList:{
-					stationList:[],
-					qualificationList:[],
-					titleList:[],
-					orgList: [],
-					partyMemberList:[]
+					partyMemberList: [
+						{
+							"id": "0",
+							"text": "否"
+						},
+						{
+							"id": "1",
+							"text": "是"
+						}
+					],
+					orgIdList: [
+						{
+							"id": "1",
+							"text": "金城分站"
+						},
+						{
+							"id": "2",
+							"text": "中桥分站"
+						},
+						{
+							"id": "3",
+							"text": "虹桥分站"
+						}
+					],
+					titleList: [
+						{
+							"id": "1",
+							"text": "主任医师"
+						},
+						{
+							"id": "2",
+							"text": "副主任医师"
+						},
+						{
+							"id": "3",
+							"text": "主治医师"
+						},
+						{
+							"id": "4",
+							"text": "医师"
+						},
+						{
+							"id": "5",
+							"text": "医士"
+						},
+						{
+							"id": "6",
+							"text": "主任护师"
+						},
+						{
+							"id": "7",
+							"text": "副主任护师"
+						},
+						{
+							"id": "8",
+							"text": "主管护师"
+						},
+						{
+							"id": "9",
+							"text": "护师"
+						},
+						{
+							"id": "10",
+							"text": "护士"
+						}
+					],
+					qualificationList: [
+						{
+							"id": "0",
+							"text": "否"
+						},
+						{
+							"id": "1",
+							"text": "是"
+						}
+					],
+					stationList: [
+						{
+							"id": "1",
+							"text": "主任"
+						},
+						{
+							"id": "2",
+							"text": "副主任"
+						},
+						{
+							"id": "3",
+							"text": "科室负责人"
+						},
+						{
+							"id": "4",
+							"text": "分站长"
+						},
+						{
+							"id": "5",
+							"text": "调度员"
+						},
+						{
+							"id": "6",
+							"text": "医生"
+						},
+						{
+							"id": "7",
+							"text": "护士"
+						},
+						{
+							"id": "8",
+							"text": "驾驶员"
+						},
+						{
+							"id": "9",
+							"text": "担架员"
+						}
+					]
 				}
 			};
 		},
 		computed:{
 			userInfo() {
-				
 				return uni.getStorageSync('userInfo')
 			},
 			selectFormText() {
 					return function(key,id) {
 						if(this.formSelectList[key]) {
 							
-						const findItem = this.formSelectList[key].find(item=>{
-							return item.id === id;
-						})
-						if(findItem) {
-							
-							return findItem.text;
-						}
-				
+							const findItem = this.formSelectList[key].find(item=>{
+								return item.id === id;
+							})
+							if(findItem) {
+								return findItem.text;
+							}
 						}
 					}
 			},
 		},
 		async onLoad() {
 			const userInfo = uni.getStorageSync('userInfo');
-			this.personInfoSubmitForm = userInfo;
-			const formSelectList = await this.getFormSelectList();
-			const {stationList,qualificationList,titleList,orgList,partyMemberList} = formSelectList;
-			this.formSelectList = {
-				stationList,qualificationList,titleList,orgIdList:orgList,partyMemberList
-			}
-			const arr = ['orgId','station','qualification','title','partyMember']
-			arr.forEach(key=>{
-				this.personInfo[key] =  this.getIndex(this.formSelectList[`${key}List`],userInfo[key]);
-			})
+			this.personInfo = userInfo;
+			// const formSelectList = await this.getFormSelectList();
+			// const {stationList,qualificationList,titleList,orgList,partyMemberList} = formSelectList;
+			// this.formSelectList = {
+			// 	stationList,qualificationList,titleList,orgIdList:orgList,partyMemberList
+			// }
+			// const arr = ['orgId','station','qualification','title','partyMember']
+			// arr.forEach(key=>{
+			// 	this.personInfo[key] =  this.getIndex(this.formSelectList[`${key}List`],userInfo[key]);
+			// })
 			
 			
 			this.personInfo.logonTime = userInfo.logonTime.split(" ")[0];
@@ -204,9 +312,12 @@
 		methods:{
 			getIndex(list,id) {
 				const findIndex = list.findIndex(item=>{
+					console.log(item)
 					return item.id === id
 				})
+				console.log(findIndex);
 				if(findIndex>-1) {
+					
 					return findIndex;
 				}
 			},
@@ -282,24 +393,30 @@
 		background-color: #fff;
 		.personInfo-cell{
 			background-color: #fff;
-			/deep/ .cell-title{
-				background-color: #fff;
-				/deep/ .cell-title-text{
-					font-family: PingFangSC-Regular;
-					font-size: 32rpx;
-					color: #333333;
-					text-align: right;
+			.cell-item {
+				/deep/ .cell-wrapper {
+					/deep/ .cell-container {
+						/deep/ .cell-title {
+							background-color: #fff;
+							/deep/ .cell-title-text {
+								font-family: PingFangSC-Regular;
+								font-size: 32rpx;
+								color: #333333;
+								text-align: right;
+							}
+						}
+						/deep/ .cell-right-content {
+							/deep/ .cell-content-text {
+								font-family: PingFangSC-Regular;
+								font-size: 16px;
+								color: #999999;
+								letter-spacing: -0.39px;
+								text-align: right;
+							}
+						}	
+					}
 				}
 			}
-			/deep/ .cell-right-content{
-				/deep/ .cell-content-text{
-					font-family: PingFangSC-Regular;
-					font-size: 16px;
-					color: #999999;
-					letter-spacing: -0.39px;
-					text-align: right;
-				}
-			}	
 		}
 		
 	}

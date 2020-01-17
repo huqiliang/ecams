@@ -65,26 +65,26 @@
 			.cell-title {
 				
 				.no-wrap();
-				text {
-					width: 100%;
-					margin-left: 0;
-					font-family: PingFangSC-Regular;
-					font-size: 34rpx;
-					text-align: left;
-					color: #333333;
-				}	
+				// text {
+				// 	width: 100%;
+				// 	margin-left: 0;
+				// 	font-family: PingFangSC-Regular;
+				// 	font-size: 34rpx;
+				// 	text-align: left;
+				// 	color: #333333;
+				// }	
 			}	
 			.cell-right-content{
 				justify-content: flex-end;
 				margin-right: 32rpx;
 				text-align: right;
-				text {
-					font-family: PingFangSC-Regular;
-					font-size: 24rpx;
-					color: #999999;
-					text-align: right;
-					line-height: 36rpx;
-				}
+				// text {
+				// 	font-family: PingFangSC-Regular;
+				// 	font-size: 24rpx;
+				// 	color: #999999;
+				// 	text-align: right;
+				// 	line-height: 36rpx;
+				// }
 				.arrow {
 					width: 36rpx;
 					height: 36rpx;
