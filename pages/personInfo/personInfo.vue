@@ -387,6 +387,7 @@
 <style scoped lang="less">
 .personInfo{
 	background-color: #f7f9fa;
+	height:100vh;
 	padding-top: 32rpx;
 	padding-bottom: 94rpx;
 	.personInfo-cell-container{
