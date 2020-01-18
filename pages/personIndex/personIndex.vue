@@ -42,7 +42,7 @@
 			<view class="diligence uni-flex-item">
 				<view class="diligence-number">
 					<text>
-						{{userInfo.diligence}}
+						{{userInfo.diligence || 0 }}
 					</text>
 				</view>
 				<view class="diligence-text">

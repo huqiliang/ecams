@@ -1,86 +1,87 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-				
-				{
-					"path" : "pages/personIndex/personIndex",
-					"style" : {
-						"navigationBarTitleText": "个人首页",
-						"navigationBarBackgroundColor":"#4BDB9B",
-						"navigationBarTextStyle":"white",
-						"navigationStyle":"custom"
-						
-					}
-				},
-				{
-				    "path" : "pages/examStart/examStart",
-				    "style" : {
-							"navigationBarTitleText": "开始考试"
-						}
-				},
-				{
-					"path" : "pages/answerSheet/answerSheet",
-					"style": {
-						"navigationBarTitleText": "答题卡"
-					}
-				},
-				{
-					"path" : "pages/examLearn/examLearn",
-					"style" : {
-						"navigationBarTitleText": "考试学习"
-					}
-				},
-				
-				{
-					"path" : "pages/transferApplication/transferApplication",
-					"style": {
-						"navigationBarTitleText": "调班申请"
-					}
-				},
-				
-				{
-					"path" : "pages/identityAuth/identityAuth",
-					"style" : {
-						"navigationBarTitleText": "身份认证"
-					}
-				},
-				{
-					"path" : "pages/examPaper/examPaper",
-					"style" : {
-						"navigationBarTitleText": ""
-					}
-				},
-				
-				{
-					"path" : "pages/personInfo/personInfo",
-					"style" : {
-						"navigationBarTitleText": "个人信息"
-					}
-				},
-				
-				{
-					"path" : "pages/examResult/examResult",
-					"style": {
-						"navigationBarTitleText": "考试结果"
-					}
-				},
-				
-				
-				{
-					"path" : "pages/notice/notice",
-					"style" : {
-						"navigationBarTitleText": "通知"
-					}
-				},
-			
-				{
-					"path": "pages/index/index",
-					"style": {
-						"navigationBarTitleText": "index"
-					}
-				}
-        
-        
-    ],
+		
+		{
+			"path": "pages/personIndex/personIndex",
+			"style": {
+				"navigationBarTitleText": "个人首页",
+				"navigationBarBackgroundColor": "#4BDB9B",
+				"navigationBarTextStyle": "white",
+				"navigationStyle": "custom"
+
+			}
+		},
+		{
+			"path": "pages/examPaper/examPaper",
+			"style": {
+				"navigationBarTitleText": "考试"
+			}
+		},
+		{
+			"path": "pages/examStart/examStart",
+			"style": {
+				"navigationBarTitleText": "开始考试"
+			}
+		},
+		{
+			"path": "pages/answerSheet/answerSheet",
+			"style": {
+				"navigationBarTitleText": "答题卡"
+			}
+		},
+		{
+			"path": "pages/examLearn/examLearn",
+			"style": {
+				"navigationBarTitleText": "考试学习"
+			}
+		},
+
+		{
+			"path": "pages/transferApplication/transferApplication",
+			"style": {
+				"navigationBarTitleText": "调班申请"
+			}
+		},
+
+		{
+			"path": "pages/identityAuth/identityAuth",
+			"style": {
+				"navigationBarTitleText": "身份认证"
+			}
+		},
+
+
+		{
+			"path": "pages/personInfo/personInfo",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			}
+		},
+
+		{
+			"path": "pages/examResult/examResult",
+			"style": {
+				"navigationBarTitleText": "考试结果"
+			}
+		},
+
+
+		{
+			"path": "pages/notice/notice",
+			"style": {
+				"navigationBarTitleText": "通知"
+			}
+		},
+
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "index"
+			}
+		}
+
+
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "test",
