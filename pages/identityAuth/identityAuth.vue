@@ -35,7 +35,7 @@
 			<cell class="identity-auth-cell" title="职称" >
 				<view slot="right-content">
 					<picker @change="bindTitlePickerChange" mode="selector" :range-key="'text'" :value="identityAuth.title" :range="formSelectList.titleList">
-						<view class="right-value">{{formSelectList.titleList[identityAuth.title].text}}</view>
+						<view class="right-value">{{selectFormText('titleList',identityAuth.title)}}</view>
 					</picker>
 				</view>
 			</cell>
@@ -49,7 +49,7 @@
 			<cell class="identity-auth-cell" title="党员" >
 				<view slot="right-content">
 					<picker @change="bindPartyMemberPickerChange" mode="selector" :range-key="'text'" :value="identityAuth.partyMember" :range="formSelectList.partyMemberList">
-						<view class="right-value">{{formSelectList.partyMemberList[identityAuth.partyMember].text}}</view>
+						<view class="right-value">{{selectFormText('partyMemberList',identityAuth.partyMember)}}</view>
 					</picker>
 				</view>
 			</cell>
@@ -68,6 +68,9 @@
 		data() {
 			const currentDate = this.getDate()
 			return {
+				identityAuthSubmitForm :{
+					
+				},
 				identityAuth:{
 					userCode: "",
 					wechatNo: "",
@@ -85,120 +88,11 @@
 					introduce:""
 				},
 				formSelectList:{
-					stationList: [
-					    {
-					      "id": "1",
-					      "text": "主任"
-					    },
-					    {
-					      "id": "2",
-					      "text": "副主任"
-					    },
-					    {
-					      "id": "3",
-					      "text": "科室负责人"
-					    },
-					    {
-					      "id": "4",
-					      "text": "分站长"
-					    },
-					    {
-					      "id": "5",
-					      "text": "调度员"
-					    },
-					    {
-					      "id": "6",
-					      "text": "医生"
-					    },
-					    {
-					      "id": "7",
-					      "text": "护士"
-					    },
-					    {
-					      "id": "8",
-					      "text": "驾驶员"
-					    },
-					    {
-					      "id": "9",
-					      "text": "担架员"
-					    }
-					  ],
-					qualificationList: [
-					    {
-					      "id": "0",
-					      "text": "否"
-					    },
-					    {
-					      "id": "1",
-					      "text": "是"
-					    }
-					  ],
-					titleList: [
-					    {
-					      "id": "1",
-					      "text": "主任医师"
-					    },
-					    {
-					      "id": "2",
-					      "text": "副主任医师"
-					    },
-					    {
-					      "id": "3",
-					      "text": "主治医师"
-					    },
-					    {
-					      "id": "4",
-					      "text": "医师"
-					    },
-					    {
-					      "id": "5",
-					      "text": "医士"
-					    },
-					    {
-					      "id": "6",
-					      "text": "主任护师"
-					    },
-					    {
-					      "id": "7",
-					      "text": "副主任护师"
-					    },
-					    {
-					      "id": "8",
-					      "text": "主管护师"
-					    },
-					    {
-					      "id": "9",
-					      "text": "护师"
-					    },
-					    {
-					      "id": "10",
-					      "text": "护士"
-					    }
-					  ],
-					orgList: [
-					    {
-					      "id": "1",
-					      "text": "金城分站"
-					    },
-					    {
-					      "id": "2",
-					      "text": "中桥分站"
-					    },
-					    {
-					      "id": "3",
-					      "text": "虹桥分站"
-					    }
-					  ],
-					partyMemberList: [
-					    {
-					      "id": "0",
-					      "text": "否"
-					    },
-					    {
-					      "id": "1",
-					      "text": "是"
-					    }
-					  ],
+					stationList: [],
+					qualificationList: [],
+					titleList: [],
+					orgList: [],
+					partyMemberList: [],
 				}
 			};
 		},
@@ -213,6 +107,23 @@
 			this.formSelectList = {
 				stationList,qualificationList,titleList,orgList,partyMemberList
 			}
+		},
+		computed:{
+			selectFormText() {
+					return function(key,id) {
+						if(this.formSelectList[key]) {
+							
+						const findItem = this.formSelectList[key].find(item=>{
+							return item.id === id;
+						})
+						if(findItem) {
+							
+							return findItem.text;
+						}
+				
+						}
+					}
+			},
 		},
 		methods:{
 			async getFormSelectList() {
