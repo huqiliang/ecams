@@ -43,7 +43,7 @@
 								  }" placeholder-class="placeholder" placeholder="请输入" :value="personInfo.cardId" />
 				</view>
 			</cell> -->
-			<cell title="身份证号"  :content="personInfo.cardId" :arrow="false"></cell>
+			<cell title="身份证号"  :content="personInfo.certificateNo" :arrow="false"></cell>
 		</view>
 		<view class="personInfo-cell-container">
 			<cell class="cell-item" title="所属分站"  :content="formSelectList.orgIdList[getIndex(formSelectList.orgIdList,personInfo.orgId)].text" ></cell>
@@ -137,7 +137,8 @@
 					logonTime: currentDate,
 					partyMember:0,
 					pictureUrl2:"",
-					introduce:""
+					introduce:"",
+					certificateNo:""
 				},
 				// personInfoSubmitForm:{
 				// 	userCode: "",
@@ -295,11 +296,11 @@
 		async onLoad() {
 			const userInfo = uni.getStorageSync('userInfo');
 			this.personInfo = userInfo;
-			// const formSelectList = await this.getFormSelectList();
-			// const {stationList,qualificationList,titleList,orgList,partyMemberList} = formSelectList;
-			// this.formSelectList = {
-			// 	stationList,qualificationList,titleList,orgIdList:orgList,partyMemberList
-			// }
+			const formSelectList = await this.getFormSelectList();
+			const {stationList,qualificationList,titleList,orgList,partyMemberList} = formSelectList;
+			this.formSelectList = {
+				stationList,qualificationList,titleList,orgIdList:orgList,partyMemberList
+			}
 			// const arr = ['orgId','station','qualification','title','partyMember']
 			// arr.forEach(key=>{
 			// 	this.personInfo[key] =  this.getIndex(this.formSelectList[`${key}List`],userInfo[key]);

@@ -3,12 +3,12 @@
 		<form @submit="formSubmit" @reset="formReset">
 			<cell class="identity-auth-cell" title="名字" :arrow="false">
 				<view slot="right-content">
-					<input class="name-input right-value" placeholder-class="placeholder" placeholder="请输入" :value="identityAuth.userName" />
+					<input @blur="bindUserNameChange" class="name-input right-value" placeholder-class="placeholder" placeholder="请输入" :value="identityAuth.userName" />
 				</view>
 			</cell>
 			<cell class="identity-auth-cell" title="手机号" :arrow="false">
 				<view slot="right-content">
-					<input type="number" placeholder-class="placeholder" class="mobile-input right-value" placeholder="请输入" :value="identityAuth.mobilePhone" />
+					<input @blur="bindMobileChange" type="number" placeholder-class="placeholder" class="mobile-input right-value" placeholder="请输入" :value="identityAuth.mobilePhone" />
 				</view>
 			</cell>
 			<cell class="identity-auth-cell" title="岗位" >
@@ -35,7 +35,7 @@
 			<cell class="identity-auth-cell" title="职称" >
 				<view slot="right-content">
 					<picker @change="bindTitlePickerChange" mode="selector" :range-key="'text'" :value="identityAuth.title" :range="formSelectList.titleList">
-						<view class="right-value">{{selectFormText('titleList',identityAuth.title)}}</view>
+						<view class="right-value">{{formSelectList.titleList[identityAuth.title].text}}</view>
 					</picker>
 				</view>
 			</cell>
@@ -49,7 +49,7 @@
 			<cell class="identity-auth-cell" title="党员" >
 				<view slot="right-content">
 					<picker @change="bindPartyMemberPickerChange" mode="selector" :range-key="'text'" :value="identityAuth.partyMember" :range="formSelectList.partyMemberList">
-						<view class="right-value">{{selectFormText('partyMemberList',identityAuth.partyMember)}}</view>
+						<view class="right-value">{{formSelectList.partyMemberList[identityAuth.partyMember].text}}</view>
 					</picker>
 				</view>
 			</cell>
@@ -68,9 +68,6 @@
 		data() {
 			const currentDate = this.getDate()
 			return {
-				identityAuthSubmitForm :{
-					
-				},
 				identityAuth:{
 					userCode: "",
 					wechatNo: "",
@@ -186,7 +183,14 @@
 				this.identityAuth.partyMember = value;
 			},
 			bindDatePickerChange({detail: {value}}) {
-				this.identityAuth.time = value;
+				
+				this.identityAuth.logonTime = value;
+			},
+			bindUserNameChange({detail: {value}}) {
+				this.identityAuth.userName = value;
+			},
+			bindMobileChange({detail: {value}}) {
+				this.identityAuth.mobilePhone = value;
 			},
 			getDate(type) {
 				const date = new Date();

@@ -13,7 +13,7 @@
 							const openid = result.openid;
 							const config = {
 								url:`../identityAuth/identityAuth?openid=${openid}`,
-								success:()=>{
+								success:() => {
 									console.log('success',result)
 								},
 								fail:(err) => {
