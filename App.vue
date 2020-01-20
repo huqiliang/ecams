@@ -6,18 +6,11 @@
 				success: async (res) => {  
 					try{
 						const resultObj = await getOauth2OpenId(res.code);
-						uni.showToast({
-							title:resultObj
-						});
+						
 						const userAuthResult = await userAuth(resultObj.openid);
-						uni.showToast({
-							title: userAuthResult.errorCode,
-							
-						});
+						
 						if(userAuthResult && userAuthResult.errorCode==='success') {
-							uni.showToast({
-								title: userAuthResult.registered
-							});
+							
 							if(userAuthResult.registered === "true") {
 								
 								uni.setStorageSync('userInfo', userAuthResult.userInfo);
@@ -36,10 +29,10 @@
 							}
 						}
 					}catch(e){
-						uni.showModal({
-							title:`错误${JSON.stringify(e)}`,
-							content:JSON.stringify(e)
-						});
+						// uni.showModal({
+						// 	title:`错误${JSON.stringify(e)}`,
+						// 	content:JSON.stringify(e)
+						// });
 						//TODO handle the exception
 					}
 					
