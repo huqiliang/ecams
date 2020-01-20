@@ -113,7 +113,7 @@
 					height: swiperHeight
 				},
 				examList: [],
-				userId: "1"
+				userId: uni.getStorageSync('userInfo').userId
 			}
 		},
 		onLoad() {

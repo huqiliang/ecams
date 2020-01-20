@@ -218,7 +218,7 @@
 		async onLoad(options) {
 			console.log(options)
 			const res = await api.examLearn.getExamDetail({
-				"userId": "1",
+				"userId": uni.getStorageSync('userInfo').userId,
 				"examId": options.examId || 2
 			})
 			console.log(res)
