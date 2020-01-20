@@ -17,7 +17,7 @@
 		</view>
 
 		<view class="uni-flex  answer-sheet-list">
-			<view class=" uni-flex-item" v-for="(answer,index) in answerList" :key="index">
+			<view class="uni-flex-item answer-sheet-item" v-for="(answer,index) in answerList" :key="index">
 				<view :class="['answer-sheet-circle', (answerSheetMap.style)[answer.status]]">
 					<text>{{index+1}}</text>
 				</view>
@@ -41,17 +41,25 @@
 		},
 		async onLoad(options) {
 			console.log(options)
-			this.isComplete = options.isComplete ? options.isComplete : true;
+			this.isComplete = options.isComplete === "true" ? true : false
 			let arr = [];
 			const res = await api.examLearn.getExamDetail({
 				"userId": 1 || uni.getStorageSync('userInfo').userId,
 				"examId": options.examId || 2
 			})
+			
 			_.map(res.examQuestion, val => {
 				if (val.qtId !== '5') {
+					if(this.isComplete) {
+						
 					arr.push({
 						status: val.selectedQiId ? (val.answer == val.selectedQiId ? "correct" : "error") : "notDone"
 					})
+					}else {
+						arr.push({
+							status: val.selectedQiId ?  "done" : "notDone"
+						})
+					}
 				} else {
 					let flag = true;
 					let notDone = true;
@@ -97,15 +105,15 @@
 			unCompleteTip() {
 				return {
 					style: {
-						0: 'un-complete-current',
-						1: 'un-complete-done',
-						2: 'un-complete-not-done',
+						// 0: 'un-complete-current',
+						0: 'un-complete-done',
+						1: 'un-complete-not-done',
 					},
 					state: {
 
-						0: "当前",
-						1: "已做",
-						2: "未做"
+						// 0: "当前",
+						0: "已做",
+						1: "未做"
 					}
 				}
 			},
@@ -133,15 +141,15 @@
 			unComplete() {
 				return {
 					style: {
-						current: 'un-complete-current',
+						// current: 'un-complete-current',
 						done: 'un-complete-done',
 						notDone: 'un-complete-not-done',
 					},
 					state: {
 
-						0: "当前",
-						1: "已做",
-						2: "未做"
+						// 0: "当前",
+						0: "已做",
+						1: "未做"
 					}
 				}
 			}
@@ -183,25 +191,32 @@
 		}
 
 		.answer-sheet-list {
-			justify-content: space-around;
+			justify-content: flex-start;
 			align-items: center;
+			
+			flex-wrap:wrap;
+			.answer-sheet-item{
+				flex-grow: 0;
+				flex-basis: 20%;
+				margin-bottom: 32rpx;;
+				.answer-sheet-circle {
+					
+					width: 96rpx;
+					height: 96rpx;
+					line-height: 96rpx;
+					border-radius: 50%;
+					// background: #FFFFFF;
+					text-align: center;
+					// border: 1px solid #36C892;
+					margin: 0 auto;
 
-			.answer-sheet-circle {
-				width: 96rpx;
-				height: 96rpx;
-				line-height: 96rpx;
-				border-radius: 50%;
-				// background: #FFFFFF;
-				text-align: center;
-				// border: 1px solid #36C892;
-				margin: 0 auto;
+					text {
+						font-family: PingFangSC-Regular;
+						font-size: 32rpx;
 
-				text {
-					font-family: PingFangSC-Regular;
-					font-size: 32rpx;
+						letter-spacing: 0;
 
-					letter-spacing: 0;
-
+					}
 				}
 			}
 		}

@@ -4,8 +4,8 @@
 			<!-- <progress class="progress" percent="20" stroke-width="6" :show-info="false" activeColor="#36C892" ></progress> -->
 			<view class="progress">
 				<view class="total-progress">
-					<view class="current-progress" :style="{width:percent+'%'}">
-						<text class="pop" :style="[popStyleRight]">{{percent}}/100</text>
+					<view class="current-progress" :style="{width:(percent / examSituation.questionNum * 100)+'%'}">
+						<text class="pop" :style="[popStyleRight]">{{percent}}/{{examSituation.questionNum}}</text>
 					</view>
 				</view>
 			</view>
@@ -236,28 +236,34 @@
 				if (this.time === 0) {
 					this.finish()
 				}
-			}, 1000 * 60)
+			}, 1000)
 		},
 		computed: {
 			percent() {
 				if (this.examSituation) {
-					return (this.examSituation.rate / this.examSituation.questionNum).toFixed(2) * 100
+					return this.examSituation.rate
 				}
 				return 0
 			},
 			popStyleRight() {
-				const flag = 87
-				if (this.percent <= 87) {
-					return {
-						left: '100%'
-					};
-				} else {
-					return {
-
-						left: `${100 - (this.percent - flag)}%`
-					}
+				return {
+					right: 0
 				}
+				// if(this.examSituation) {
+				
+				// const flag = 87
+				// if (this.percent / this.examSituation.questionNum * 100 <= 87) {
+				// 	return {
+				// 		left: '100%'
+				// 	};
+				// } else {
+				// 	return {
 
+				// 		left: `${this.examSituation.questionNum - (this.percent - (this.percent / this.examSituation.questionNum * 100))}%`
+				// 	}
+				// }
+
+				// }
 			}
 		}
 	}

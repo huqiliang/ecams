@@ -4,25 +4,47 @@
 		 onLaunch: async function() {
 			uni.login({
 				success: async (res) => {  
-					const result = await getOauth2OpenId(res.code);
-					const userAuthResult = await userAuth(result.openid);
-					if(userAuthResult && userAuthResult.errorCode==='success') {
-						if(userAuthResult.registered === "true") {
-							uni.setStorageSync('userInfo', userAuthResult.userInfo);
-						}else {
-							const openid = result.openid;
-							const config = {
-								url:`../identityAuth/identityAuth?openid=${openid}`,
-								success:() => {
-									console.log('success',result)
-								},
-								fail:(err) => {
-									console.log("fail",err)
+					try{
+						const resultObj = await getOauth2OpenId(res.code);
+						uni.showToast({
+							title:resultObj
+						});
+						const userAuthResult = await userAuth(resultObj.openid);
+						uni.showToast({
+							title: userAuthResult.errorCode,
+							
+						});
+						if(userAuthResult && userAuthResult.errorCode==='success') {
+							uni.showToast({
+								title: userAuthResult.registered
+							});
+							if(userAuthResult.registered === "true") {
+								
+								uni.setStorageSync('userInfo', userAuthResult.userInfo);
+							}else {
+								const openid = resultObj.openid;
+								const config = {
+									url:`../identityAuth/identityAuth?openid=${openid}`,
+									success:() => {
+										
+									},
+									fail:(err) => {
+										console.log("fail",err)
+									}
 								}
+								uni.reLaunch(config)
 							}
-							uni.reLaunch(config)
 						}
+					}catch(e){
+						uni.showModal({
+							title:`错误${JSON.stringify(e)}`,
+							content:JSON.stringify(e)
+						});
+						//TODO handle the exception
 					}
+					
+					
+					
 				}  
 			});
 			// if(!uni.getStorageSync("userInfo")){

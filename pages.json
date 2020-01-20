@@ -1,11 +1,6 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		{
-			"path": "pages/answerSheet/answerSheet",
-			"style": {
-				"navigationBarTitleText": "答题卡"
-			}
-		},
+		
 		{
 			"path": "pages/personIndex/personIndex",
 			"style": {
@@ -14,6 +9,12 @@
 				"navigationBarTextStyle": "white",
 				"navigationStyle": "custom"
 
+			}
+		},
+		{
+			"path": "pages/answerSheet/answerSheet",
+			"style": {
+				"navigationBarTitleText": "答题卡"
 			}
 		},
 		{
