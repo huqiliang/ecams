@@ -113,7 +113,7 @@
 					height: swiperHeight
 				},
 				examList: [],
-				userId: uni.getStorageSync('userInfo').userId
+				userId: 1 || uni.getStorageSync('userInfo').userId
 			}
 		},
 		onLoad() {
@@ -148,7 +148,7 @@
 						break;
 					case "3":
 						config = {
-							url: `../answerSheet/answerSheet?examId=${item.examId}`,
+							url: `../answerSheet/answerSheet?examId=${item.examId}&isComplete=true`,
 							success: () => {
 								console.log('success', arguments)
 							},

@@ -1,7 +1,7 @@
 <template>
 	<!-- <cmd-cell-item title="排班表发布通知(11.25-11.29)" addon="附加文案" ></cmd-cell-item> -->
 	<div >
-		<cell :arrow="false" v-for="(item,index) in noticeList">
+		<cell :arrow="false" v-for="(item,index) in noticeList" :key='index'>
 			<view class="" slot="left-content">
 				{{item.wechatContent}}
 			</view>

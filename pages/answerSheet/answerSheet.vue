@@ -1,135 +1,147 @@
 <template>
 	<view class="answer-sheet">
 		<view class="answer-sheet-type-tip ">
-			
-				<view class=" answer-sheet-type-tip-item">
-					
-					<text :class="[(answerSheetTipMap.style)[0],'dot-tip']"></text>
-					<text class="answer-sheet-type-tip-item-text">{{(answerSheetTipMap.state)[0]}}</text>
-				</view>
-				<view class=" answer-sheet-type-tip-item">
-					<text :class="[(answerSheetTipMap.style)[1],'dot-tip']"></text>
-					<text class="answer-sheet-type-tip-item-text">{{(answerSheetTipMap.state)[1]}}</text>
-				</view>
-				<view class=" answer-sheet-type-tip-item">
-					<text :class="[(answerSheetTipMap.style)[2],'dot-tip']"></text>
-					<text class="answer-sheet-type-tip-item-text">{{(answerSheetTipMap.state)[2]}}</text>
-				</view>
-			
+			<view class=" answer-sheet-type-tip-item">
+				<text :class="[(answerSheetTipMap.style)[0],'dot-tip']"></text>
+				<text class="answer-sheet-type-tip-item-text">{{(answerSheetTipMap.state)[0]}}</text>
+			</view>
+			<view class=" answer-sheet-type-tip-item">
+				<text :class="[(answerSheetTipMap.style)[1],'dot-tip']"></text>
+				<text class="answer-sheet-type-tip-item-text">{{(answerSheetTipMap.state)[1]}}</text>
+			</view>
+			<view class=" answer-sheet-type-tip-item">
+				<text :class="[(answerSheetTipMap.style)[2],'dot-tip']"></text>
+				<text class="answer-sheet-type-tip-item-text">{{(answerSheetTipMap.state)[2]}}</text>
+			</view>
+
 		</view>
-		
-		<view class="uni-flex  answer-sheet-list" >
+
+		<view class="uni-flex  answer-sheet-list">
 			<view class=" uni-flex-item" v-for="(answer,index) in answerList" :key="index">
-				
 				<view :class="['answer-sheet-circle', (answerSheetMap.style)[answer.status]]">
-					<text>{{index}}</text>
+					<text>{{index+1}}</text>
 				</view>
 			</view>
 		</view>
-		
+
 	</view>
 </template>
 
 <script>
-	
+	import api from "@/server/";
+	import _ from "lodash"
 	export default {
-		props:{
-		},
+		props: {},
 		data() {
 			return {
 				//答题卡是已完成还是未完成的答题卡
-				isComplete:true,
-				answerList:[
-					{
-						status:"correct"
-					},
-					{
-						status:"correct"
-					},
-					{
-						status:"error"
-					},
-					{
-						status:"notDone"
-					}
-				],
-				
-				
+				isComplete: false,
+				answerList: [],
 			};
 		},
-		onLoad(option){
+		async onLoad(options) {
+			console.log(options)
+			this.isComplete = options.isComplete ? options.isComplete : true;
+			let arr = [];
+			const res = await api.examLearn.getExamDetail({
+				"userId": 1 || uni.getStorageSync('userInfo').userId,
+				"examId": options.examId || 2
+			})
+			_.map(res.examQuestion, val => {
+				if (val.qtId !== '5') {
+					arr.push({
+						status: val.selectedQiId ? (val.answer == val.selectedQiId ? "correct" : "error") : "notDone"
+					})
+				} else {
+					let flag = true;
+					let notDone = true;
+					_.map(res.groupQuestions, item => {
+						if (item.selectedQiId !== item.answer) {
+							flag = false;
+						}
+						if (item.selectedQiId) {
+							notDone = false
+						}
+					})
+					arr.push({
+						status: notDone ? "notDone" : (flag ? "success" : "error")
+					})
+				}
+			})
+			this.answerList = arr;
+			console.log(res)
 		},
-		computed:{
+		computed: {
 			// 返回是完成还是未完成状态的样式
-			answerSheetTipMap () {
-				if(this.isComplete) {
+			answerSheetTipMap() {
+				if (this.isComplete) {
 					return this.completeTip;
-				}else{
+				} else {
 					return this.unCompleteTip;
 				}
 			},
-			completeTip (){
+			completeTip() {
 				return {
-					style : {
-						0:'complete-correct',
-						1:'complete-error',
-						2:'complete-not-done',
+					style: {
+						0: 'complete-correct',
+						1: 'complete-error',
+						2: 'complete-not-done',
 					},
-					state:{
-						0:"正确",
-						1:"错误",
-						2:"未做"
+					state: {
+						0: "正确",
+						1: "错误",
+						2: "未做"
 					}
 				}
 			},
-			unCompleteTip (){
+			unCompleteTip() {
 				return {
-					style : {
-						0: 'un-complete-current', 
-						1: 'un-complete-done',  
+					style: {
+						0: 'un-complete-current',
+						1: 'un-complete-done',
 						2: 'un-complete-not-done',
 					},
-					state:{
-						
-						0:"当前",
-						1:"已做",
-						2:"未做"
+					state: {
+
+						0: "当前",
+						1: "已做",
+						2: "未做"
 					}
 				}
 			},
-			answerSheetMap () {
-				if(this.isComplete) {
+			answerSheetMap() {
+				if (this.isComplete) {
 					return this.complete;
-				}else{
+				} else {
 					return this.unComplete;
 				}
 			},
-			complete(){
+			complete() {
 				return {
-					style : {
-						correct:'complete-correct',
-						error:'complete-error',
-						notDone:'complete-not-done',
+					style: {
+						correct: 'complete-correct',
+						error: 'complete-error',
+						notDone: 'complete-not-done',
 					},
-					state:{
-						0:"正确",
-						1:"错误",
-						2:"未做"
+					state: {
+						0: "正确",
+						1: "错误",
+						2: "未做"
 					}
 				}
 			},
-			unComplete(){
+			unComplete() {
 				return {
-					style : {
-						current:'un-complete-current', 
-						done: 'un-complete-done',  
+					style: {
+						current: 'un-complete-current',
+						done: 'un-complete-done',
 						notDone: 'un-complete-not-done',
 					},
-					state:{
-						
-						0:"当前",
-						1:"已做",
-						2:"未做"
+					state: {
+
+						0: "当前",
+						1: "已做",
+						2: "未做"
 					}
 				}
 			}
@@ -138,91 +150,104 @@
 </script>
 
 <style lang="less">
-.answer-sheet {
-	
-	.answer-sheet-type-tip {
-		height: 84rpx;
-		display: block;
-			
-		.answer-sheet-type-tip-item {
-			display: inline-block;
-			width:120rpx;
+	.answer-sheet {
+
+		.answer-sheet-type-tip {
 			height: 84rpx;
-			padding:16rpx 0  32rpx 32rpx;
-			.answer-sheet-type-tip-item-text{
-				font-family: PingFangSC-Regular;
-				font-size: 24rpx;
-				color: #333333;
-				letter-spacing: 0;
-				
-				line-height: 36rpx;
-			}
-			.dot-tip{
-				vertical-align: middle;
+			display: block;
+
+			.answer-sheet-type-tip-item {
 				display: inline-block;
-				margin-right:8rpx;
-				width: 24rpx;
-				height: 24rpx;
+				width: 120rpx;
+				height: 84rpx;
+				padding: 16rpx 0 32rpx 32rpx;
+
+				.answer-sheet-type-tip-item-text {
+					font-family: PingFangSC-Regular;
+					font-size: 24rpx;
+					color: #333333;
+					letter-spacing: 0;
+
+					line-height: 36rpx;
+				}
+
+				.dot-tip {
+					vertical-align: middle;
+					display: inline-block;
+					margin-right: 8rpx;
+					width: 24rpx;
+					height: 24rpx;
+					border-radius: 50%;
+				}
+			}
+		}
+
+		.answer-sheet-list {
+			justify-content: space-around;
+			align-items: center;
+
+			.answer-sheet-circle {
+				width: 96rpx;
+				height: 96rpx;
+				line-height: 96rpx;
 				border-radius: 50%;
+				// background: #FFFFFF;
+				text-align: center;
+				// border: 1px solid #36C892;
+				margin: 0 auto;
+
+				text {
+					font-family: PingFangSC-Regular;
+					font-size: 32rpx;
+
+					letter-spacing: 0;
+
+				}
 			}
 		}
-	}
-	.answer-sheet-list {
-		justify-content: space-around;
-		align-items: center;
-		.answer-sheet-circle {
-			width: 96rpx;
-			height: 96rpx;
-			line-height: 96rpx;
-			border-radius: 50%;
-			// background: #FFFFFF;
-			text-align: center;
-			// border: 1px solid #36C892;
-			margin: 0 auto;
-	
-			text{
-				font-family: PingFangSC-Regular;
-				font-size: 32rpx;
-				
-				letter-spacing: 0;
-				
+
+		.complete-not-done {
+			text {
+
+				color: #333333;
 			}
+
+			border:2rpx solid #F5F5F5;
+			background-color:#F5F5F5
 		}
-	}
-	.complete-not-done {
-		text {
-			
-			color: #333333;
+
+		.complete-correct {
+			text {
+				color: #FFFFFF;
+			}
+
+			border:2rpx solid #36C892;
+			background-color:#36C892
 		}
-		border:2rpx solid #F5F5F5;
-		background-color:#F5F5F5
-	}
-	.complete-correct {
-		text {
-			color:#FFFFFF;
+
+		.complete-error {
+			text {
+				color: #FFFFFF;
+			}
+
+			border: 2rpx solid #F5F5F5;
+			background-color:#F74E41
 		}
-		border:2rpx solid #36C892;
-		background-color:#36C892
-	}
-	.complete-error {
-		text {
-			color:#FFFFFF;
+
+		.un-complete-current {
+			border: 2rpx solid #F5F5F5;
+			background-color: #F5F5F5
 		}
-		border: 2rpx solid #F5F5F5;
-		background-color:#F74E41
+
+		.un-complete-done {
+			border: 2rpx solid #36C892;
+			background-color: #FFFFFF
+		}
+
+		.un-complete-not-done {
+			border: 2rpx solid #F5F5F5;
+			background-color: #FFFFFF
+		}
+
 	}
-	.un-complete-current {
-		border:2rpx solid #F5F5F5;
-		background-color:#F5F5F5
-	}
-	.un-complete-done {
-		border:2rpx solid #36C892;
-		background-color:#FFFFFF
-	}
-	.un-complete-not-done {
-		border:2rpx solid #F5F5F5;
-		background-color:#FFFFFF
-	}
-	
-}
 </style>

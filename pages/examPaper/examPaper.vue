@@ -74,7 +74,7 @@
 			<view class="uni-flex-item exam-paper-cooperation-item" @click="changeTopic('pre')">
 				<text class="icon left-icon"></text><text>上一题</text>
 			</view>
-			<view class="uni-flex-item exam-paper-cooperation-item">
+			<view class="uni-flex-item exam-paper-cooperation-item" @click="goAnswer()">
 				<text class="icon container-icon"></text><text>答题卡</text>
 			</view>
 			<view class="uni-flex-item exam-paper-cooperation-item" @click="changeTopic('next')">
@@ -97,6 +97,11 @@
 			};
 		},
 		methods: {
+			goAnswer(){
+				uni.navigateTo({
+					url:'../answerSheet/answerSheet?isComplete=false'
+				})
+			},
 			isActive(item) {
 				const qtId = this.paper.qtId;
 				let active = false;
@@ -218,7 +223,7 @@
 		async onLoad(options) {
 			console.log(options)
 			const res = await api.examLearn.getExamDetail({
-				"userId": uni.getStorageSync('userInfo').userId,
+				"userId": 1 || uni.getStorageSync('userInfo').userId,
 				"examId": options.examId || 2
 			})
 			console.log(res)
@@ -243,7 +248,6 @@
 			popStyleRight() {
 				const flag = 87
 				if (this.percent <= 87) {
-
 					return {
 						left: '100%'
 					};
