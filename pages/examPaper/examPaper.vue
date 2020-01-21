@@ -97,9 +97,9 @@
 			};
 		},
 		methods: {
-			goAnswer(){
+			goAnswer() {
 				uni.navigateTo({
-					url:'../answerSheet/answerSheet?isComplete=false'
+					url: '../answerSheet/answerSheet?isComplete=false'
 				})
 			},
 			isActive(item) {
@@ -200,12 +200,10 @@
 								uni.showToast({
 									title: "交卷成功",
 								})
-								setTimeout(() => {
-									uni.redirectTo({
-										url: "../personIndex/personIndex"
-									})
-								}, 2000)
-
+								uni.redirectTo({
+									url: `../examResult/examResult?examId=${this.examSituation.examId}`
+								})
+								
 							}
 						}
 
@@ -229,7 +227,7 @@
 			console.log(res)
 			this.examSituation = res.examSituation;
 			this.examQuestion = res.examQuestion;
-			this.changePage(res.examSituation.rate)
+			this.changePage(res.examSituation.rate?res.examSituation.rate:1)
 			this.time = (res.examSituation.timeLimit - res.examSituation.timeSpan)
 			this.timer = setInterval(() => {
 				this.time -= 1
@@ -250,7 +248,7 @@
 					right: 0
 				}
 				// if(this.examSituation) {
-				
+
 				// const flag = 87
 				// if (this.percent / this.examSituation.questionNum * 100 <= 87) {
 				// 	return {
