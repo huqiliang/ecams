@@ -7,7 +7,7 @@
 		<view class="exam-result-info uni-flex">
 			<view class="exam-result-pass-num-box uni-flex-item">
 				<view class="exam-result-info-top-text">
-					<text class="exam-result-info-pass-number">2</text>
+					<text class="exam-result-info-pass-number">{{examResult.rightAnswers}}</text>
 					<text class="exam-result-info-symbol">/</text>
 					<text class="exam-result-info-total-number">{{examResult.questionNum}}</text>
 				</view>
@@ -69,7 +69,7 @@
 		methods:{
 			async getExamResult(examId="4") {
 				const data = {
-					userId:1 || uni.getStorageSync("userInfo").userId,
+					userId: uni.getStorageSync("userInfo").userId,
 					examId
 				}
 				const res = await api.examLearn.getExamDetail(data);
