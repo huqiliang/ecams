@@ -1,4 +1,4 @@
-export const  baseURL = "http://114.55.93.241:8080"
+export const  baseURL = "http://test.emsonline.com.cn"
 
 export const request  = (url,data,method="post") => {
 	return new Promise((resolve,reject)=>{
