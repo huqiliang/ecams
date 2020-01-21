@@ -29,10 +29,10 @@
 							}
 						}
 					}catch(e){
-						// uni.showModal({
-						// 	title:`错误${JSON.stringify(e)}`,
-						// 	content:JSON.stringify(e)
-						// });
+						uni.showModal({
+							title:`错误${JSON.stringify(e)}`,
+							content:JSON.stringify(e)
+						});
 						//TODO handle the exception
 					}
 					
