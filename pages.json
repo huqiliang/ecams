@@ -12,6 +12,12 @@
 			}
 		},
 		{
+			"path": "pages/examResult/examResult",
+			"style": {
+				"navigationBarTitleText": "考试结果"
+			}
+		},
+		{
 			"path": "pages/answerSheet/answerSheet",
 			"style": {
 				"navigationBarTitleText": "答题卡"
@@ -59,12 +65,7 @@
 			}
 		},
 
-		{
-			"path": "pages/examResult/examResult",
-			"style": {
-				"navigationBarTitleText": "考试结果"
-			}
-		},
+		
 
 
 		{

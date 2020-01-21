@@ -395,30 +395,30 @@
 		background-color: #fff;
 		.personInfo-cell{
 			background-color: #fff;
-			.cell-item {
-				/deep/ .cell-wrapper {
-					/deep/ .cell-container {
-						/deep/ .cell-title {
-							background-color: #fff;
-							/deep/ .cell-title-text {
-								font-family: PingFangSC-Regular;
-								font-size: 32rpx;
-								color: #333333;
-								text-align: right;
-							}
-						}
-						/deep/ .cell-right-content {
-							/deep/ .cell-content-text {
-								font-family: PingFangSC-Regular;
-								font-size: 16px;
-								color: #999999;
-								letter-spacing: -0.39px;
-								text-align: right;
-							}
-						}	
-					}
-				}
-			}
+			// .cell-item {
+			// 	/deep/ .cell-wrapper {
+			// 		/deep/ .cell-container {
+			// 			/deep/ .cell-title {
+			// 				background-color: #fff;
+			// 				/deep/ .cell-title-text {
+			// 					font-family: PingFangSC-Regular;
+			// 					font-size: 32rpx;
+			// 					color: #333333;
+			// 					text-align: right;
+			// 				}
+			// 			}
+			// 			/deep/ .cell-right-content {
+			// 				/deep/ .cell-content-text {
+			// 					font-family: PingFangSC-Regular;
+			// 					font-size: 16px;
+			// 					color: #999999;
+			// 					letter-spacing: -0.39px;
+			// 					text-align: right;
+			// 				}
+			// 			}	
+			// 		}
+			// 	}
+			// }
 		}
 		
 	}

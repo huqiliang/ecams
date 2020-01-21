@@ -9,7 +9,7 @@
 				<view class="exam-result-info-top-text">
 					<text class="exam-result-info-pass-number">2</text>
 					<text class="exam-result-info-symbol">/</text>
-					<text class="exam-result-info-total-number">20</text>
+					<text class="exam-result-info-total-number">{{examResult.questionNum}}</text>
 				</view>
 				<view class="exam-result-info-bottom-text">
 					<text>答对</text>
@@ -17,7 +17,7 @@
 			</view>
 			<view class="exam-result-score-box uni-flex-item">
 				<view class="exam-result-info-top-text">
-					<text class="exam-result-score-number">10</text>
+					<text class="exam-result-score-number">{{examResult.score}}</text>
 				</view>
 				<view class="exam-result-info-bottom-text">
 					<text>得分</text>
@@ -25,7 +25,7 @@
 			</view>
 			<view class="exam-result-use-time-box uni-flex-item">
 				<view class="exam-result-info-top-text">
-					<text class="exam-result-time-number">10′37″</text>
+					<text class="exam-result-time-number">{{examResult.timeSpan}}分</text>
 				</view>
 				<view class="exam-result-info-bottom-text">
 					<text>用时</text>
@@ -45,16 +45,17 @@
 </template>
 
 <script>
+	import api from "@/server/index.js"
+	import {
+		ERR_OK
+	} from "@/utils/config.js"
+	
 	export default {
-		props:{
-			isPass:{
-				type:Boolean,
-				default:true
-			}
-		},
+		
 		data() {
 			return {
-				
+				examResult:{},
+				isPass:true,
 			};
 		},
 		computed:{
@@ -62,11 +63,30 @@
 				return this.isPass ? "恭喜通过本次考试！" :"很遗憾，未通过"
 			}
 		},
+		onLoad() {
+			this.getExamResult();
+		},
 		methods:{
+			async getExamResult(examId="4") {
+				const data = {
+					userId:1 || uni.getStorageSync("userInfo").userId,
+					examId
+				}
+				const res = await api.examLearn.getExamDetail(data);
+				if (res.errorCode === ERR_OK) {
+					
+					this.examResult = res.examSituation
+					if(this.examResult.score > this.examResult.passingMark) {
+						this.isPass = true;
+					}else {
+						this.isPass = false;
+					}
+				}
+			},
 			goToIndex() {
 				
 				const config = {
-					url:"../examLearn/examLearn",
+					url:"../personIndex/personIndex",
 					success:()=>{
 						console.log('success',arguments)
 					},
@@ -77,7 +97,16 @@
 				uni.navigateTo(config)
 			},
 			viewResult() {
-				
+				const config = {
+					url:"../answerSheet/answerSheet?isComplete=true",
+					success:()=>{
+						console.log('success',arguments)
+					},
+					fail:(err) => {
+						console.log("fail",err)
+					}
+				}
+				uni.navigateTo(config)
 			}
 		}
 	}
@@ -93,10 +122,18 @@
 			padding-top:32rpx;
 			
 			.pass {
-				.bg-image("../static/pass")
+				//.bg-image("../static/icon_pass");
+				//三倍图本身有问题 只放2被图片
+				background-image:url("../../static/icon_pass@2x.png") 
+				
+				
 			}
 			.unpass {
-				.bg-image("../static/unpass")
+				//.bg-image("../static/icon_unpass");
+				//background-image:url("../../static/icon_unpass@2x.png")
+				//三倍图本身有问题 只放2被图片
+				background-image: url("../../static/icon_unpass@2x.png");
+				
 			}
 			.exam-result-image{
 				width:280rpx;
