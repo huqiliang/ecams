@@ -4,8 +4,8 @@
 			<!-- <progress class="progress" percent="20" stroke-width="6" :show-info="false" activeColor="#36C892" ></progress> -->
 			<view class="progress">
 				<view class="total-progress">
-					<view class="current-progress" :style="{width:(percent / examSituation.questionNum * 100)+'%'}">
-						<text class="pop" :style="[popStyleRight]">{{percent}}/{{examSituation.questionNum}}</text>
+					<view class="current-progress" :style="{width:(examSituation.rate / examSituation.questionNum * 100)+'%'}">
+						<text class="pop" :style="[popStyleRight]">{{examSituation.rate}}/{{examSituation.questionNum}}</text>
 					</view>
 				</view>
 			</view>
@@ -98,9 +98,14 @@
 		},
 		methods: {
 			goAnswer() {
-				uni.navigateTo({
-					url: '../answerSheet/answerSheet?isComplete=false'
-				})
+				// console.log(" this.examSituation.examId", this.examSituation.examId)
+				// let  id =  this.examSituation.examId
+				if (this.examSituation) {
+					uni.navigateTo({
+						url: '../answerSheet/answerSheet?isComplete=false&examId=' + this.examSituation.examId
+					})
+				}
+
 			},
 			isActive(item) {
 				const qtId = this.paper.qtId;
@@ -149,6 +154,9 @@
 					default:
 						break;
 				}
+				this.examQuestion[this.examSituation.rate - 1] = this.paper
+				uni.setStorageSync('examQuestion', this.examQuestion)
+				uni.setStorageSync('examSituation', this.examSituation)
 			},
 			changeTopic(type) {
 				if (type === 'next') {
@@ -203,7 +211,7 @@
 								uni.redirectTo({
 									url: `../examResult/examResult?examId=${this.examSituation.examId}`
 								})
-								
+
 							}
 						}
 
@@ -213,6 +221,8 @@
 			changePage(rate) {
 				this.examSituation.rate = rate;
 				this.paper = this.examQuestion[rate - 1]
+				uni.setStorageSync('examQuestion', this.examQuestion)
+				uni.setStorageSync('examSituation', this.examSituation)
 			},
 		},
 		onHide() {
@@ -222,27 +232,30 @@
 			console.log(options)
 			const res = await api.examLearn.getExamDetail({
 				"userId": uni.getStorageSync('userInfo').userId,
-				"examId": options.examId || 2
+				"examId": options.examId
 			})
 			console.log(res)
 			this.examSituation = res.examSituation;
 			this.examQuestion = res.examQuestion;
-			this.changePage(res.examSituation.rate?res.examSituation.rate:1)
-			this.time = (res.examSituation.timeLimit - res.examSituation.timeSpan)
+			this.changePage(res.examSituation.rate ? res.examSituation.rate : 1)
+			this.time = parseInt(res.examSituation.timeLimit) - (!!res.examSituation.timeSpan ? parseInt(res.examSituation.timeSpan) :
+				0)
+			console.log(res.examSituation.timeLimit)
 			this.timer = setInterval(() => {
 				this.time -= 1
 				if (this.time === 0) {
 					this.finish()
 				}
-			}, 1000)
+			}, 1000 * 60)
 		},
 		computed: {
-			percent() {
-				if (this.examSituation) {
-					return this.examSituation.rate
-				}
-				return 0
-			},
+			// percent() {
+			// 	console.log("this.examSituation:",this.examSituation)
+			// 	if (this.examSituation) {
+			// 		return this.examSituation.rate
+			// 	}
+			// 	return 0
+			// },
 			popStyleRight() {
 				return {
 					right: 0

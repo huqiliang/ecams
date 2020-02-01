@@ -43,27 +43,32 @@
 			console.log(options)
 			this.isComplete = options.isComplete === "true" ? true : false
 			let arr = [];
-			const res = await api.examLearn.getExamDetail({
-				"userId": uni.getStorageSync('userInfo').userId,
-				"examId": options.examId || 2
-			})
-			
-			_.map(res.examQuestion, val => {
+			let exam;
+			const examQuestion = uni.getStorageSync("examQuestion")
+			if (!examQuestion) {
+				const res = await api.examLearn.getExamDetail({
+					"userId": uni.getStorageSync('userInfo').userId,
+					"examId": options.examId
+				})
+				exam = res.examQuestion
+			} else {
+				exam = examQuestion
+			}
+			_.map(exam, val => {
 				if (val.qtId !== '5') {
-					if(this.isComplete) {
-						
-					arr.push({
-						status: val.selectedQiId ? (val.answer == val.selectedQiId ? "correct" : "error") : "notDone"
-					})
-					}else {
+					if (this.isComplete) {
 						arr.push({
-							status: val.selectedQiId ?  "done" : "notDone"
+							status: val.selectedQiId ? (val.answer == val.selectedQiId ? "correct" : "error") : "notDone"
+						})
+					} else {
+						arr.push({
+							status: val.selectedQiId ? "done" : "notDone"
 						})
 					}
 				} else {
 					let flag = true;
 					let notDone = true;
-					_.map(res.groupQuestions, item => {
+					_.map(examQuestion.groupQuestions, item => {
 						if (item.selectedQiId !== item.answer) {
 							flag = false;
 						}
@@ -77,7 +82,6 @@
 				}
 			})
 			this.answerList = arr;
-			console.log(res)
 		},
 		computed: {
 			// 返回是完成还是未完成状态的样式
@@ -193,14 +197,17 @@
 		.answer-sheet-list {
 			justify-content: flex-start;
 			align-items: center;
-			
-			flex-wrap:wrap;
-			.answer-sheet-item{
+
+			flex-wrap: wrap;
+
+			.answer-sheet-item {
 				flex-grow: 0;
 				flex-basis: 20%;
-				margin-bottom: 32rpx;;
+				margin-bottom: 32rpx;
+				;
+
 				.answer-sheet-circle {
-					
+
 					width: 96rpx;
 					height: 96rpx;
 					line-height: 96rpx;
