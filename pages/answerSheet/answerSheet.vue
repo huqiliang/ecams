@@ -44,7 +44,7 @@
 			this.isComplete = options.isComplete === "true" ? true : false
 			let arr = [];
 			const res = await api.examLearn.getExamDetail({
-				"userId": 1 || uni.getStorageSync('userInfo').userId,
+				"userId": uni.getStorageSync('userInfo').userId,
 				"examId": options.examId || 2
 			})
 			

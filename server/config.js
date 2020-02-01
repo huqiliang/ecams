@@ -1,5 +1,5 @@
-// export const  baseURL = "https://test.emsonline.com.cn"
-export const baseURL = "http://114.55.93.241"
+export const  baseURL = "https://www.lumingtec.cn"
+// export const baseURL = "http://114.55.93.241"
 
 export const request  = (url,data,method="post") => {
 	return new Promise((resolve,reject)=>{
