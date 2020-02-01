@@ -22,7 +22,7 @@
 		},
 		onShow() {
 			this.interval = setInterval(() => {
-				console.log(this.hasUserInfo())
+				console.log("hasUserInfo:" + this.hasUserInfo())
 				if (this.hasUserInfo()) {
 					clearInterval(this.interval)
 					uni.redirectTo({
