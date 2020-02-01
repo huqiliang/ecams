@@ -74,7 +74,7 @@
 			"style": {
 				"navigationBarTitleText": "通知"
 			}
-		},
+		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
