@@ -17,7 +17,7 @@
 		</view>
 
 		<view class="uni-flex  answer-sheet-list">
-			<view class="uni-flex-item answer-sheet-item" v-for="(answer,index) in answerList" :key="index">
+			<view class="uni-flex-item answer-sheet-item" v-for="(answer,index) in answerList" :key="index" @click="goPaper(answer,index)">
 				<view :class="['answer-sheet-circle', (answerSheetMap.style)[answer.status]]">
 					<text>{{index+1}}</text>
 				</view>
@@ -38,6 +38,15 @@
 				isComplete: false,
 				answerList: [],
 			};
+		},
+		methods: {
+			goPaper(answer,index) {
+				console.log(answer)
+				const examId = uni.getStorageSync("examSituation").examId
+				uni.reLaunch({
+					url: `../examPaper/examPaper?examId=${examId}&rate=${index+1}`
+				});
+			}
 		},
 		async onLoad(options) {
 			console.log(options)

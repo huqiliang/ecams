@@ -92,7 +92,7 @@
 			return {
 				examSituation: null, //试卷信息
 				timer: null,
-				time: 0,
+				// time: 0,
 				paper: {} //当前试题
 			};
 		},
@@ -101,6 +101,7 @@
 				// console.log(" this.examSituation.examId", this.examSituation.examId)
 				// let  id =  this.examSituation.examId
 				if (this.examSituation) {
+					this.saveExam();
 					uni.navigateTo({
 						url: '../answerSheet/answerSheet?isComplete=false&examId=' + this.examSituation.examId
 					})
@@ -129,6 +130,10 @@
 				clearInterval(this.timer)
 				fn && fn()
 			},
+			saveExam() {
+				uni.setStorageSync('examQuestion', this.examQuestion)
+				uni.setStorageSync('examSituation', this.examSituation)
+			},
 			chooseAnswer(item, questionItems) {
 				const qtId = this.paper.qtId;
 				switch (qtId) {
@@ -155,8 +160,7 @@
 						break;
 				}
 				this.examQuestion[this.examSituation.rate - 1] = this.paper
-				uni.setStorageSync('examQuestion', this.examQuestion)
-				uni.setStorageSync('examSituation', this.examSituation)
+				this.saveExam()
 			},
 			changeTopic(type) {
 				if (type === 'next') {
@@ -202,7 +206,9 @@
 
 							const res2 = await api.examLearn.updateUserExam(_.merge(this.examSituation, {
 								examQuestion,
-								examState: "3"
+								examState: "3",
+								asState: "3",
+								timeSpan: this.examSituation.timeSpan
 							}))
 							if (res2) {
 								uni.showToast({
@@ -221,8 +227,7 @@
 			changePage(rate) {
 				this.examSituation.rate = rate;
 				this.paper = this.examQuestion[rate - 1]
-				uni.setStorageSync('examQuestion', this.examQuestion)
-				uni.setStorageSync('examSituation', this.examSituation)
+				this.saveExam()
 			},
 		},
 		onHide() {
@@ -235,20 +240,35 @@
 				"examId": options.examId
 			})
 			console.log(res)
-			this.examSituation = res.examSituation;
-			this.examQuestion = res.examQuestion;
-			this.changePage(res.examSituation.rate ? res.examSituation.rate : 1)
-			this.time = parseInt(res.examSituation.timeLimit) - (!!res.examSituation.timeSpan ? parseInt(res.examSituation.timeSpan) :
-				0)
-			console.log(res.examSituation.timeLimit)
+			this.examSituation = uni.getStorageSync('examSituation') || res.examSituation;
+			this.examQuestion = uni.getStorageSync('examQuestion') || res.examQuestion;
+			const rate = options.rate ? options.rate : (res.examSituation.rate ? res.examSituation.rate : 1)
+			console.log(rate)
+			this.changePage(rate)
 			this.timer = setInterval(() => {
 				this.time -= 1
+				//console.log(this.time)
 				if (this.time === 0) {
 					this.finish()
 				}
-			}, 1000 * 60)
+			}, 1000)
 		},
 		computed: {
+			time: {
+				get() {
+					if (this.examSituation) {
+						return parseFloat(this.examSituation.timeLimit) * 60 - (this.examSituation.hasOwnProperty("timeSpan") ?
+							parseFloat(
+								this.examSituation.timeSpan) * 60 :
+							0)
+					} else {
+						return 0
+					}
+				},
+				set(val) {
+					this.$set(this.examSituation, "timeSpan", (parseFloat(this.examSituation.timeLimit) * 60 - parseFloat(val)) / 60)
+				}
+			},
 			// percent() {
 			// 	console.log("this.examSituation:",this.examSituation)
 			// 	if (this.examSituation) {
