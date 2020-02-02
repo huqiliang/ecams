@@ -49,9 +49,15 @@
 							<view class="exam-paper-topic-title">
 								<text>{{index+1}}.{{item.questionTitle}}：</text>
 							</view>
-							<view class="exam-paper-topic-option-list uni-flex">
+							<view class="exam-paper-topic-option-list uni-flex" v-if="paper.qgType==='1'">
 								<view v-for="val in item.questionItems" :key='val.qiName' @click="chooseAnswer(val,item)">
 									<text class="exam-paper-topic-option-item" :class="{'exam-paper-topic-option-item-active':item.selectedQiId===val.qiId}">{{val.qiName}}</text>
+								</view>
+							</view>
+							<view class="exam-paper-topic-option-list" v-else>
+								<view class="bottom" v-for="val in item.questionItems" :key='val.qiName' @click="chooseAnswer(val,item)">
+									<text class="exam-paper-topic-option-item" :class="{'exam-paper-topic-option-item-active':item.selectedQiId===val.qiId}">{{val.qiName}}</text>
+									<text class="exam-paper-option-option">{{val.qiDisplayName}}</text>
 								</view>
 							</view>
 						</view>
@@ -93,6 +99,7 @@
 				examSituation: null, //试卷信息
 				timer: null,
 				// time: 0,
+				examId: null,
 				paper: {} //当前试题
 			};
 		},
@@ -100,10 +107,11 @@
 			goAnswer() {
 				// console.log(" this.examSituation.examId", this.examSituation.examId)
 				// let  id =  this.examSituation.examId
+				console.log()
 				if (this.examSituation) {
 					this.saveExam();
 					uni.navigateTo({
-						url: '../answerSheet/answerSheet?isComplete=false&examId=' + this.examSituation.examId
+						url: '../answerSheet/answerSheet?isComplete=' + this.isComplete + '&examId=' + this.examSituation.examId
 					})
 				}
 
@@ -131,36 +139,47 @@
 				fn && fn()
 			},
 			saveExam() {
-				uni.setStorageSync('examQuestion', this.examQuestion)
-				uni.setStorageSync('examSituation', this.examSituation)
+				uni.setStorageSync('exam_' + this.examId, {
+					examQuestion: this.examQuestion,
+					examSituation: this.examSituation
+				})
+
 			},
 			chooseAnswer(item, questionItems) {
-				const qtId = this.paper.qtId;
-				switch (qtId) {
-					case "1":
-						//单选题
-						this.$set(this.paper, "selectedQiId", item.qiId)
-						break;
-					case "2":
-						//多选题
-						let arr = this.paper.selectedQiId ? _.split(this.paper.selectedQiId, ",") : [];
-						const id = item.qiId;
-						if (arr.includes(id)) {
-							_.pull(arr, id)
-						} else {
-							arr.push(id)
-						}
-						this.$set(this.paper, "selectedQiId", _.toString(arr))
-						break;
-					case "5":
-						//组合题
-						this.$set(questionItems, "selectedQiId", item.qiId)
-						break;
-					default:
-						break;
+				if (!this.isComplete) {
+					const qtId = this.paper.qtId;
+					console.log(questionItems)
+					switch (qtId) {
+						case "1":
+							//单选题
+							this.$set(this.paper, "selectedQiId", item.qiId)
+							break;
+						case "2":
+							//多选题
+							let arr = this.paper.selectedQiId ? _.split(this.paper.selectedQiId, ",") : [];
+							const id = item.qiId;
+							if (arr.includes(id)) {
+								_.pull(arr, id)
+							} else {
+								arr.push(id)
+							}
+							this.$set(this.paper, "selectedQiId", _.toString(arr))
+							break;
+						case "5":
+							//组合题
+							this.$set(questionItems, "selectedQiId", item.qiId)
+							break;
+						default:
+							break;
+					}
+					this.examQuestion[this.examSituation.rate - 1] = this.paper
+					this.saveExam()
+				} else {
+					uni.showToast({
+						icon: "none",
+						title: "已交卷，不能修改",
+					})
 				}
-				this.examQuestion[this.examSituation.rate - 1] = this.paper
-				this.saveExam()
 			},
 			changeTopic(type) {
 				if (type === 'next') {
@@ -211,6 +230,7 @@
 								timeSpan: this.examSituation.timeSpan
 							}))
 							if (res2) {
+								uni.removeStorageSync('exam_' + this.examId)
 								uni.showToast({
 									title: "交卷成功",
 								})
@@ -235,25 +255,36 @@
 		},
 		async onLoad(options) {
 			console.log(options)
-			const res = await api.examLearn.getExamDetail({
-				"userId": uni.getStorageSync('userInfo').userId,
-				"examId": options.examId
-			})
-			console.log(res)
-			this.examSituation = uni.getStorageSync('examSituation') || res.examSituation;
-			this.examQuestion = uni.getStorageSync('examQuestion') || res.examQuestion;
+			this.examId = options.examId;
+			let res;
+			const exam = uni.getStorageSync('exam_' + options.examId);
+			if (exam) {
+				res = exam
+			} else {
+				res = await api.examLearn.getExamDetail({
+					"userId": uni.getStorageSync('userInfo').userId,
+					"examId": options.examId
+				})
+			}
+			this.examSituation = res.examSituation;
+			this.examQuestion = res.examQuestion;
 			const rate = options.rate ? options.rate : (res.examSituation.rate ? res.examSituation.rate : 1)
 			console.log(rate)
 			this.changePage(rate)
 			this.timer = setInterval(() => {
 				this.time -= 1
 				//console.log(this.time)
-				if (this.time === 0) {
+				if (this.time <= 0) {
 					this.finish()
 				}
 			}, 1000)
 		},
 		computed: {
+			isComplete() {
+				if (this.examSituation)
+					return this.examSituation.asState == 3 ? true : false
+				return false
+			},
 			time: {
 				get() {
 					if (this.examSituation) {

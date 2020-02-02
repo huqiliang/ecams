@@ -37,23 +37,24 @@
 				//答题卡是已完成还是未完成的答题卡
 				isComplete: false,
 				answerList: [],
+				examId:null,
 			};
 		},
 		methods: {
-			goPaper(answer,index) {
+			goPaper(answer, index) {
 				console.log(answer)
-				const examId = uni.getStorageSync("examSituation").examId
 				uni.reLaunch({
-					url: `../examPaper/examPaper?examId=${examId}&rate=${index+1}`
+					url: `../examPaper/examPaper?examId=${this.examId}&rate=${index+1}`
 				});
 			}
 		},
 		async onLoad(options) {
 			console.log(options)
-			this.isComplete = options.isComplete === "true" ? true : false
+			this.isComplete = options.isComplete === "true" ? true : false;
+			this.examId = options.examId
 			let arr = [];
 			let exam;
-			const examQuestion = uni.getStorageSync("examQuestion")
+			const examQuestion = uni.getStorageSync("exam_" + this.examId).examQuestion
 			if (!examQuestion) {
 				const res = await api.examLearn.getExamDetail({
 					"userId": uni.getStorageSync('userInfo').userId,
@@ -77,7 +78,7 @@
 				} else {
 					let flag = true;
 					let notDone = true;
-					_.map(examQuestion.groupQuestions, item => {
+					_.map(exam.groupQuestions, item => {
 						if (item.selectedQiId !== item.answer) {
 							flag = false;
 						}
