@@ -235,7 +235,7 @@
 									title: "交卷成功",
 								})
 								uni.redirectTo({
-									url: `../examResult/examResult?examId=${this.examSituation.examId}`
+									url: `../examResult/examResult?examId=${this.examId}`
 								})
 
 							}

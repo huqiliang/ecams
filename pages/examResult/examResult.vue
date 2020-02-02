@@ -32,7 +32,7 @@
 				</view>
 			</view>
 		</view>
-		
+
 		<view class="cooperative-group uni-flex">
 			<view class="uni-flex-item button-to-index">
 				<button @click="goToIndex">返回首页</button>
@@ -49,61 +49,63 @@
 	import {
 		ERR_OK
 	} from "@/utils/config.js"
-	
+
 	export default {
-		
+
 		data() {
 			return {
-				examResult:{},
-				isPass:true,
+				examResult: {},
+				examId: null,
+				isPass: true,
 			};
 		},
-		computed:{
-			resultText(){
-				return this.isPass ? "恭喜通过本次考试！" :"很遗憾，未通过"
+		computed: {
+			resultText() {
+				return this.isPass ? "恭喜通过本次考试！" : "很遗憾，未通过"
 			}
 		},
-		onLoad() {
-			this.getExamResult();
+		onLoad(options) {
+			this.examId = options.examId;
+			this.getExamResult(options.examId);
 		},
-		methods:{
-			async getExamResult(examId="4") {
+		methods: {
+			async getExamResult(examId) {
 				const data = {
 					userId: uni.getStorageSync("userInfo").userId,
 					examId
 				}
 				const res = await api.examLearn.getExamDetail(data);
 				if (res.errorCode === ERR_OK) {
-					
+
 					this.examResult = res.examSituation
-					if(this.examResult.score > this.examResult.passingMark) {
+					if (this.examResult.score > this.examResult.passingMark) {
 						this.isPass = true;
-					}else {
+					} else {
 						this.isPass = false;
 					}
 				}
 			},
 			goToIndex() {
-				
+
 				const config = {
-					url:"../personIndex/personIndex",
-					success:()=>{
-						console.log('success',arguments)
+					url: "../personIndex/personIndex",
+					success: () => {
+						console.log('success', arguments)
 					},
-					fail:(err) => {
-						console.log("fail",err)
+					fail: (err) => {
+						console.log("fail", err)
 					}
 				}
 				uni.navigateTo(config)
 			},
 			viewResult() {
 				const config = {
-					url:"../answerSheet/answerSheet?isComplete=true",
-					success:()=>{
-						console.log('success',arguments)
+					url: "../answerSheet/answerSheet?isComplete=true&examId=" + this.examId,
+					success: () => {
+						console.log('success', arguments)
 					},
-					fail:(err) => {
-						console.log("fail",err)
+					fail: (err) => {
+						console.log("fail", err)
 					}
 				}
 				uni.navigateTo(config)
@@ -114,80 +116,89 @@
 
 <style lang="less" scoped>
 	@import "../../common/mixins.less";
+
 	.exam-result {
-		.exam-result-image-box{
-			width:100%;
+		.exam-result-image-box {
+			width: 100%;
 			// height:252rpx;
 			margin-bottom: 64rpx;
-			padding-top:32rpx;
-			
+			padding-top: 32rpx;
+
 			.pass {
 				//.bg-image("../static/icon_pass");
 				//三倍图本身有问题 只放2被图片
-				background-image:url("../../static/icon_pass@2x.png") 
-				
-				
+				background-image: url("../../static/icon_pass@2x.png")
 			}
+
 			.unpass {
 				//.bg-image("../static/icon_unpass");
 				//background-image:url("../../static/icon_unpass@2x.png")
 				//三倍图本身有问题 只放2被图片
 				background-image: url("../../static/icon_unpass@2x.png");
-				
+
 			}
-			.exam-result-image{
-				width:280rpx;
-				height:252rpx;
+
+			.exam-result-image {
+				width: 280rpx;
+				height: 252rpx;
 				margin: 0 auto 0;
-				
+
 				background-size: 100%;
 				background-position: center center;
 				background-repeat: no-repeat;
 			}
-			.exam-result-text{
+
+			.exam-result-text {
 				width: 100%;
 				display: block;
 				font-family: PingFangSC-Semibold;
 				font-size: 32rpx;
 				color: #36C892;
 				text-align: center;
-				
+
 			}
-			
+
 		}
-		.exam-result-info{
+
+		.exam-result-info {
 			align-items: center;
 			justify-content: space-around;
-			
+
 			.exam-result-info-top-text {
 				text-align: center;
+
 				text {
 					text-align: center;
 				}
+
 				.exam-result-info-pass-number {
 					font-family: DINEngschrift-Alternate;
 					font-size: 48rpx;
 					color: #36C892;
 					text-align: center;
 				}
+
 				.exam-result-info-symbol {
 					font-family: DINEngschrift-Alternate;
 					font-size: 48rpx;
 					color: #333333;
 					text-align: center;
 				}
+
 				.exam-result-info-total-number {
 					font-family: DINEngschrift-Alternate;
 					font-size: 48rpx;
 					color: #333333;
 					text-align: center;
 				}
+
 				.exam-result-score-number {
 					font-family: DINEngschrift-Alternate;
 					font-size: 48rpx;
 					color: #36C892;
 					text-align: center;
 				}
+
 				.exam-result-time-number {
 					font-family: DINEngschrift-Alternate;
 					font-size: 48rpx;
@@ -195,8 +206,10 @@
 					text-align: center;
 				}
 			}
+
 			.exam-result-info-bottom-text {
 				text-align: center;
+
 				text {
 					font-family: PingFangSC-Regular;
 					font-size: 28rpx;
@@ -204,14 +217,15 @@
 					text-align: center;
 				}
 			}
-			
+
 		}
+
 		.cooperative-group {
-			position:fixed;
-			width:100%;
+			position: fixed;
+			width: 100%;
 			height: 96rpx;
-			bottom:0rpx;
-			
+			bottom: 0rpx;
+
 			.button-to-index {
 				button {
 					height: 96rpx;
@@ -222,16 +236,18 @@
 					font-size: 16px;
 					color: #36C892;
 					text-align: center;
-					border:none;
-					&::after{
-						border:none;
-						border-radius:0;
+					border: none;
+
+					&::after {
+						border: none;
+						border-radius: 0;
 					}
 				}
 			}
-			.button-view-result{
+
+			.button-view-result {
 				button {
-					border:none;
+					border: none;
 					height: 96rpx;
 					line-height: 96rpx;
 					background: #36C892;
@@ -240,13 +256,13 @@
 					font-size: 16px;
 					color: #FFFFFF;
 					text-align: center;
-					&::after{
-						border:none;
-						border-radius:0;
+
+					&::after {
+						border: none;
+						border-radius: 0;
 					}
 				}
 			}
 		}
 	}
-	
 </style>
