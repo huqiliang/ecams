@@ -40,16 +40,31 @@
 		data() {
 			return {
 				examInfo: {},
+				examId: null,
 				userId: uni.getStorageSync("userInfo").userId
 			};
 		},
-		async onLoad(options) {
-			console.log(options)
-			const data = await api.examLearn.getExamInfo(options.examId);
-			if (data.errorCode === ERR_OK) {
+		onLoad(options) {
+			this.examId = options.examId
+		},
+		async onShow() {
+			const detail = await await api.examLearn.getExamDetail({
+				"userId": uni.getStorageSync('userInfo').userId,
+				"examId": this.examId
+			});
+			console.log(detail)
+			if(detail.examSituation && detail.examSituation.examState==='1'){
+				const data = await api.examLearn.getExamInfo(this.examId);
 				console.log(data)
-				this.examInfo = data.examInfo;
-				this.setTitle(this.examInfo.examName)
+				if (data.errorCode === ERR_OK) {
+
+					this.examInfo = data.examInfo;
+					this.setTitle(this.examInfo.examName)
+				}
+			}else{
+				uni.reLaunch({
+					url:"../examLearn/examLearn"
+				})
 			}
 		},
 		methods: {
@@ -75,9 +90,10 @@
 			},
 			async startExam(examId) {
 				const res = await api.examStart.startExam(this.userId, examId)
-				
 				if (res.errorCode === 'success') {
-					uni.navigateTo({url:`../examPaper/examPaper?examId=${examId}`})
+					uni.navigateTo({
+						url: `../examPaper/examPaper?examId=${examId}`
+					})
 				}
 			}
 		}
