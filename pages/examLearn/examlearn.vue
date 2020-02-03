@@ -148,7 +148,7 @@
 						break;
 					case "3":
 						config = {
-							url: `../answerSheet/answerSheet?examId=${item.examId}&isComplete=true`,
+							url: `../examResult/examResult?examId=${item.examId}&isComplete=true`,
 							success: () => {
 								console.log('success', arguments)
 							},

@@ -78,7 +78,7 @@
 				} else {
 					let flag = true;
 					let notDone = true;
-					_.map(exam.groupQuestions, item => {
+					_.map(val.groupQuestions, item => {
 						if (item.selectedQiId !== item.answer) {
 							flag = false;
 						}
@@ -87,7 +87,7 @@
 						}
 					})
 					arr.push({
-						status: notDone ? "notDone" : (flag ? "success" : "error")
+						status: notDone ? "notDone" : (flag ? "correct" : "error")
 					})
 				}
 			})

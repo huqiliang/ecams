@@ -197,7 +197,14 @@
 					if (rate <= this.examSituation.questionNum) {
 						this.changePage(rate)
 					} else {
-						this.handPaper()
+						if(!this.isComplete){
+							this.handPaper()
+						}else{
+							uni.showToast({
+								title:"无法重复交卷"
+							})
+						}
+						
 					}
 				} else if (type === 'pre') {
 					let rate = parseInt(this.examSituation.rate) - 1;
