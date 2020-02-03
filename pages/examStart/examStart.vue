@@ -43,8 +43,9 @@
 				userId: uni.getStorageSync("userInfo").userId
 			};
 		},
-		async onLoad(option) {
-			const data = await api.examLearn.getExamInfo(option.examId);
+		async onLoad(options) {
+			console.log(options)
+			const data = await api.examLearn.getExamInfo(options.examId);
 			if (data.errorCode === ERR_OK) {
 				console.log(data)
 				this.examInfo = data.examInfo;

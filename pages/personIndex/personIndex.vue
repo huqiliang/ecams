@@ -14,11 +14,11 @@
 			<view class="person-user-info uni-flex" :style="{'padding-top':nav_bar_wrapper_height}">
 				<view class="person-user-info-left  uni-flex">
 					<!-- <navigator url="../personInfo/personInfo" animationType='pop-in' animationDuration="200"> -->
-						<button class='login-button' open-type="getUserInfo" @getuserinfo="getuserinfo" withCredentials="true">
-							<view class="avart">
-								<open-data type="userAvatarUrl"></open-data>
-							</view>
-						</button>
+					<button class='login-button' open-type="getUserInfo" @getuserinfo="getuserinfo" withCredentials="true">
+						<view class="avart">
+							<open-data type="userAvatarUrl"></open-data>
+						</view>
+					</button>
 					<!-- </navigator> -->
 					<view class="area">
 						<view class="name">
@@ -54,7 +54,7 @@
 			<view class="my-exam uni-flex-item">
 				<view class="my-exam-number">
 					<text>
-						{{userInfo.myExamCount || 0}}
+						{{indexInfo.myExamCount || 0}}
 					</text>
 				</view>
 				<view class="my-exam-text">
@@ -91,7 +91,8 @@
 	import _ from 'lodash'
 	import personStep from "./personStep.vue"
 	import {
-		userWechatMessage
+		userWechatMessage,
+		userHomePageInfo
 	} from "../../server/modules/personInfo.js"
 	export default {
 		components: {
@@ -118,12 +119,13 @@
 					}
 				],
 				messageList: [],
-				userInfoData:{}
+				userInfoData: {},
+				indexInfo:{}
 			};
 		},
 		computed: {
 			userInfo() {
-				
+
 				return uni.getStorageSync('userInfo')
 			},
 			nav_bar_wrapper_height() {
@@ -140,51 +142,51 @@
 				return uni.getSystemInfoSync().statusBarHeight + 'px';
 			}
 		},
-		methods:{
-			getuserinfo: ()=>{
+		methods: {
+			getuserinfo: () => {
 				//try {
-				 //  const userInfo = uni.getStorageSync("userInfo");
-					// if(!userInfo) {
-						wx.login({
-							success (res) {
-								if (res.code) {
-								  //发起网络请求
-								  var code = res.code
-									// 获取微信用户信息
-									wx.getUserInfo({
-									  success: (res) => {
-										console.log(res);
-										const userInfo = uni.getStorageSync('userInfo');
-										const newUserInfo = Object.assign({},userInfo,res.userInfo)
-										uni.setStorageSync('userInfo', newUserInfo);
-										const config = {
-											url:"../personInfo/personInfo",
-											success:() => {
-												console.log('success')
-											},
-											fail:(err) => {
-												console.log("fail",err)
-											}
+				//  const userInfo = uni.getStorageSync("userInfo");
+				// if(!userInfo) {
+				wx.login({
+					success(res) {
+						if (res.code) {
+							//发起网络请求
+							var code = res.code
+							// 获取微信用户信息
+							wx.getUserInfo({
+								success: (res) => {
+									console.log(res);
+									const userInfo = uni.getStorageSync('userInfo');
+									const newUserInfo = Object.assign({}, userInfo, res.userInfo)
+									uni.setStorageSync('userInfo', newUserInfo);
+									const config = {
+										url: "../personInfo/personInfo",
+										success: () => {
+											console.log('success')
+										},
+										fail: (err) => {
+											console.log("fail", err)
 										}
-										uni.navigateTo(config)
-									  },
-									  fail:res=>{
-											console.log(res,'fail')
-										  const config = {
-										  	url:"../personInfo/personInfo",
-										  	success:() => {
-										  		console.log('success',this.userInfoData)
-										  	},
-										  	fail:(err) => {
-										  		console.log("fail",err)
-										  	}
-										  }
-										  uni.navigateTo(config)
-									   }
-									})
+									}
+									uni.navigateTo(config)
+								},
+								fail: res => {
+									console.log(res, 'fail')
+									const config = {
+										url: "../personInfo/personInfo",
+										success: () => {
+											console.log('success', this.userInfoData)
+										},
+										fail: (err) => {
+											console.log("fail", err)
+										}
+									}
+									uni.navigateTo(config)
 								}
-							}
-						})
+							})
+						}
+					}
+				})
 				// 	} else {
 				// 		const config = {
 				// 			url:"../personInfo/personInfo",
@@ -210,7 +212,11 @@
 				val.secondTiem = val.handleTime.split(' ')[1];
 			})
 			this.messageList = _.toArray(_.groupBy(res.messageList, "groupTime"))
-			console.log(this.messageList)
+			const res2 = await userHomePageInfo({
+				"userId": this.userInfo.userId,
+				"wechatNo": this.userInfo.wechatNo
+			})
+			this.indexInfo = res2
 		}
 	}
 </script>
@@ -267,32 +273,33 @@
 				align-items: center;
 				//height: 292rpx;
 				padding: 40rpx 32rpx 132rpx;
-				.login-button{
+
+				.login-button {
 					width: 120rpx;
 					height: 120rpx;
-					padding:0;
+					padding: 0;
 					border-radius: 50%;
-					background:transparent;
+					background: transparent;
 					margin-right: 32rpx;
-					&::after{
-						border:none;
+
+					&::after {
+						border: none;
 					}
-				
+
 					.avart {
 						flex-basis: 16%;
 						height: 120rpx;
-						
+
 						width: 120rpx;
 						height: 120rpx;
 						border-radius: 50%;
 						background-color: #FFFFFF;
 						overflow: hidden;
 
-						image {
-							
-						}
+						image {}
 					}
 				}
+
 				.area {
 					.name {
 						font-family: PingFangSC-Medium;
@@ -310,7 +317,7 @@
 						color: #FFFFFF;
 						letter-spacing: 0.23px;
 						text-align: left;
-						margin-right:12rpx;
+						margin-right: 12rpx;
 					}
 				}
 

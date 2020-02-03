@@ -116,7 +116,7 @@
 				userId:  uni.getStorageSync('userInfo').userId
 			}
 		},
-		onLoad() {
+		onShow() {
 			this.getMyExam(this.userId);
 		},
 		methods: {

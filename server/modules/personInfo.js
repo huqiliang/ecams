@@ -1,10 +1,7 @@
 
 import {baseURL,request}  from "../config.js"
 
-export const userHomePageInfo = (userId,wechatNo) => {
-	const data = {
-		wechatNo
-	}
+export const userHomePageInfo = (data) => {
 	return request(`${baseURL}/Business/serviceInterface/userHomePageInfo.json`,data)
 }
 

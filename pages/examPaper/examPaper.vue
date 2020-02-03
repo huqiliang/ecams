@@ -12,7 +12,7 @@
 
 		</view>
 		<view class="count-down">
-			<text class="count-down-text">倒计时：{{time}}</text>
+			<text class="count-down-text">倒计时：{{ms(time)}}</text>
 		</view>
 
 		<scroll-view :scroll-y="true" style="height:100%;width: 100%;">
@@ -104,6 +104,16 @@
 			};
 		},
 		methods: {
+			ms(s){
+				var h;
+				h  =   Math.floor(s/60);
+				s  =   s%60;
+				h    +=    '';
+				s    +=    '';
+				h  =   (h.length==1)?'0'+h:h;
+				s  =   (s.length==1)?'0'+s:s;
+				return h+':'+s;
+			},
 			goAnswer() {
 				// console.log(" this.examSituation.examId", this.examSituation.examId)
 				// let  id =  this.examSituation.examId
@@ -251,7 +261,7 @@
 			},
 		},
 		onHide() {
-			this.finish()
+			this.saveExam()
 		},
 		async onLoad(options) {
 			console.log(options)
@@ -327,7 +337,7 @@
 
 				// }
 			}
-		}
+		},
 	}
 </script>
 
