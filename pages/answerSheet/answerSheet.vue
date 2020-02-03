@@ -55,7 +55,7 @@
 			let arr = [];
 			let exam;
 			const examQuestion = uni.getStorageSync("exam_" + this.examId).examQuestion
-			if (!examQuestion) {
+			if (!examQuestion || isComplete) {
 				const res = await api.examLearn.getExamDetail({
 					"userId": uni.getStorageSync('userInfo').userId,
 					"examId": options.examId
