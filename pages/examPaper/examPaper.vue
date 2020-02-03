@@ -121,7 +121,7 @@
 				if (this.examSituation) {
 					this.saveExam();
 					uni.navigateTo({
-						url: '../answerSheet/answerSheet?isComplete=' + this.isComplete + '&examId=' + this.examSituation.examId
+						url: '../answerSheet/answerSheet?isComplete=false&examId=' + this.examSituation.examId
 					})
 				}
 
@@ -299,7 +299,7 @@
 		computed: {
 			isComplete() {
 				if (this.examSituation)
-					return this.examSituation.asState == 3 ? true : false
+					return this.examSituation.asState == "3" ? true : false
 				return false
 			},
 			time: {

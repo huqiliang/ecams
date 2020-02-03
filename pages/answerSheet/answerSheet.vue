@@ -37,7 +37,7 @@
 				//答题卡是已完成还是未完成的答题卡
 				isComplete: false,
 				answerList: [],
-				examId:null,
+				examId: null,
 			};
 		},
 		methods: {
@@ -55,7 +55,7 @@
 			let arr = [];
 			let exam;
 			const examQuestion = uni.getStorageSync("exam_" + this.examId).examQuestion
-			if (!examQuestion || isComplete) {
+			if (!examQuestion || this.isComplete) {
 				const res = await api.examLearn.getExamDetail({
 					"userId": uni.getStorageSync('userInfo').userId,
 					"examId": options.examId
@@ -87,7 +87,7 @@
 						}
 					})
 					arr.push({
-						status: notDone ? "notDone" : (flag ? "correct" : "error")
+						status: notDone ? "notDone" : !this.isComplete ? "done" : (flag ? "correct" : "error")
 					})
 				}
 			})
