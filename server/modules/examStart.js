@@ -12,7 +12,7 @@ export const getExamDetail = (examId) => {
 	const data = {
 		examId
 	}
-	return request(`${baseURL}/Business/serviceInterface/getExamDetail`,data)
+	return request(`${baseURL}/Business/serviceInterface/getExamInfo`,data)
 }
 
 export default {

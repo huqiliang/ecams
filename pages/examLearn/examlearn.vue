@@ -125,13 +125,16 @@
 				let config;
 				switch (item.userExamState) {
 					case "1":
-						config = {
-							url: `../examStart/examStart?examId=${item.examId}`,
-							success: () => {
-								console.log('success', arguments)
-							},
-							fail: (err) => {
-								console.log("fail", err)
+						const flag = await this.startExam(item.examId)
+						if(flag) {
+							config = {
+								url: `../examStart/examStart?examId=${item.examId}`,
+								success: () => {
+									console.log('success', arguments)
+								},
+								fail: (err) => {
+									console.log("fail", err)
+								}
 							}
 						}
 						break;
@@ -169,6 +172,17 @@
 				if (data.errorCode === ERR_OK) {
 					this.examList = data.examList;
 				}
+			},
+			async startExam(examId) {
+				await api.examStart.startExam(
+					this.userId,
+					examId
+				)
+				.then(res=>{
+					if (data.errorCode === ERR_OK) {
+						return true;
+					}
+				})
 			},
 			tabsChange(index) {
 				this.qsTabs.current = index;
