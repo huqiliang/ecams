@@ -48,19 +48,13 @@
 			this.examId = options.examId
 		},
 		async onShow() {
-			const detail = await await api.examLearn.getExamDetail({
-				"userId": uni.getStorageSync('userInfo').userId,
-				"examId": this.examId
-			});
+			const detail = await await api.examLearn.getExamInfo(this.examId);
+			// "userId": uni.getStorageSync('userInfo').userId,
 			console.log(detail)
-			if(detail.examSituation && detail.examSituation.examState==='1'){
+			if(detail.errorCode === ERR_OK){
 				const data = await api.examLearn.getExamInfo(this.examId);
-				console.log(data)
-				if (data.errorCode === ERR_OK) {
-
-					this.examInfo = data.examInfo;
-					this.setTitle(this.examInfo.examName)
-				}
+				this.examInfo = detail.examInfo;
+				this.setTitle(this.examInfo.examName)
 			}else{
 				uni.reLaunch({
 					url:"../examLearn/examLearn"

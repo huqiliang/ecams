@@ -125,8 +125,8 @@
 				let config;
 				switch (item.userExamState) {
 					case "1":
-						const flag = await this.startExam(item.examId)
-						if(flag) {
+						// const flag = await this.startExam(item.examId)
+						// if(flag) {
 							config = {
 								url: `../examStart/examStart?examId=${item.examId}`,
 								success: () => {
@@ -136,7 +136,7 @@
 									console.log("fail", err)
 								}
 							}
-						}
+						// }
 						break;
 					case "2":
 						config = {
