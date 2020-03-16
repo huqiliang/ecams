@@ -140,7 +140,7 @@
 						break;
 					case "2":
 						config = {
-							url: `../examPaper/examPaper?examId=${item.examId}`,
+							url: `../examPaper/examPaper?examId=${item.examId}&useStorage=1`,
 							success: () => {
 								console.log('success', arguments)
 							},

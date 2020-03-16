@@ -274,9 +274,8 @@
 			console.log(options)
 			this.examId = options.examId;
 			let res;
-			const exam = uni.getStorageSync('exam_' + options.examId);
-			if (exam) {
-				res = exam
+			if (options.useStorage=='1') {
+				res = uni.getStorageSync('exam_' + options.examId)
 			} else {
 				res = await api.examLearn.getExamDetail({
 					"userId": uni.getStorageSync('userInfo').userId,
